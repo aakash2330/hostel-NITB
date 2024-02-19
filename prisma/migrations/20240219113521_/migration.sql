@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "UserPermissionRole" AS ENUM ('USER', 'ADMIN', 'CREATOR');
+
 -- CreateTable
 CREATE TABLE "Post" (
     "id" SERIAL NOT NULL,
@@ -44,6 +47,7 @@ CREATE TABLE "User" (
     "email" TEXT,
     "emailVerified" TIMESTAMP(3),
     "image" TEXT,
+    "role" "UserPermissionRole" NOT NULL DEFAULT 'USER',
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );

@@ -10,6 +10,7 @@ import DiscordProvider from "next-auth/providers/discord";
 
 import { env } from "~/env";
 import { db } from "~/server/db";
+import { UserPermissionRole } from "@prisma/client";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -20,16 +21,14 @@ import { db } from "~/server/db";
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
-      id: string;
-      // ...other properties
-      // role: UserRole;
+      id: string,
+      role?: UserPermissionRole;
     } & DefaultSession["user"];
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    role: UserPermissionRole;
+  }
 }
 
 /**
@@ -39,12 +38,15 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
 
+
+
   session: {
-    strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30 days
+    strategy: 'jwt',
   },
   adapter: PrismaAdapter(db),
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
+
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
@@ -53,7 +55,7 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        email: { label: "email", type: "text", placeholder: "email@email.com" },
         password: { label: "Password", type: "password" },
       },
 
@@ -61,22 +63,46 @@ export const authOptions: NextAuthOptions = {
         if (!credentials) {
           return null;
         }
-        const username = credentials.username;
+        const username = credentials.email;
         const password = credentials.password;
 
         if (username == "admin" && password == "admin") {
           return {
             id: "adminId",
             email: "adminEmail",
-            name: "name",
-            image: "image"
+            role: "USER",
+            name: "admin"
           };
         } else {
           return null;
         }
       },
     }),
-  ]
+  ],
+  callbacks: {
+    async signIn({ account, profile }) {
+      console.log('account', account);
+      console.log('profile', profile);
+      return true;
+    },
+    session: ({ session, token, user }) => {
+      session.user.role = token.role as UserPermissionRole;
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id,
+        },
+      };
+    },
+    jwt: ({ token, user }) => {
+      if (user) {
+        token.role = user.role;
+        token.id = user.id;
+      }
+      return token;
+    },
+  },
 };
 
 /**
