@@ -5,6 +5,18 @@
 await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+  images: {
+    domains: [
+      'assets-static-prod.displate.com',
+      'previews.dropbox.com',
+      'images.pexels.com',
+      'static.displate.com',
+      'myxtur.com',
+      'plus.unsplash.com',
+      'images.unsplash.com'
+    ],
+  }
+};
 
 export default config;

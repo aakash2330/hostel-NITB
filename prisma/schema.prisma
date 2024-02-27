@@ -2,76 +2,307 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+enum UserPermissionRole {
+  USER
+  ADMIN
+  CREATOR
+}
 
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
+enum IDCardType {
+  // Add specific ID card types here
+  PASSPORT
+  DRIVING_LICENSE
+  AADHAR
+}
 
-    @@index([name])
+enum Nationality {
+  // Add specific nationalities
+  INDIAN
+  FOREIGNER
+  NRI
+}
+
+enum Religion {
+  // Add specific religions
+  HINDU
+  MUSLIM
+  CHRISTIAN
+  JAIN
+  BHUDDHISM
+  OTHER
+}
+
+enum TypeOrg {
+  // Specify types of organizations
+
+  CENTRAL_GOVT
+  PRIVATE
+  STATE_GOVT
+  OTHER
+}
+
+enum State {
+  // Add specific states
+
+  MADHYA_PRADESH
+  UTTAR_PRADESH
+  BIHAR
+  CHATISGARSH
+  MAHARASTRA
+}
+
+enum Country {
+  // Add specific countries
+
+  INDIA
+  AMERICA
+}
+
+enum PhysicalChallenged {
+  YES
+  NO
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum Category {
+  // Define categories if needed
+
+  SC
+  ST
+  OBC
+  GEN
+}
+
+enum Floor {
+  // Add floor numbers or labels
+
+  GROUND_FLOOR
+  UPPER_GROUND_FLOOR
+  FIRST_FLOOR
+}
+
+enum Occupancy {
+  SINGLE
+  DOUBLE
+  TRIPLE
+}
+
+enum RoomType {
+  SINGLE_BED
+  DOUBLE_BED
+  TRIPLE_BED
+  FOUR_BED
+}
+
+enum Answer {
+  YES
+  NO
+}
+
+enum RoomTariff {
+  SINGLE_BEDDED_1200
+  DOUBLE_BEDDED_2500
+  EXECTIVE_3500
+}
+
+enum BookingStatus {
+  BOOKED
+  VACANT
+  OCCUPIED
+  RESERVED
+  UNDER_MANTENANCE
+  NOT_FOR_BOOKING
+}
+
+enum GuestHouse {
+  SARAN_GUEST_HOUSE
+  VISHVESHVARAYA_GUEST_HOUSE
+  CHANDRAKANT_HOSTEL
+}
+
+enum CleaningStatus {
+  READY
+  UNDER_MAINTENANCE
+}
+
+enum MaritalStatus {
+  MARRIED
+  UNMARRIED
+}
+
+enum Title {
+  MR
+  MS
+  DR
+  MRS
 }
 
 // Necessary for Next auth
 model Account {
-    id                String  @id @default(cuid())
-    userId            String
-    type              String
-    provider          String
-    providerAccountId String
-    refresh_token     String? // @db.Text
-    access_token      String? // @db.Text
-    expires_at        Int?
-    token_type        String?
-    scope             String?
-    id_token          String? // @db.Text
-    session_state     String?
-    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                String  @id @default(cuid()) @map("_id")
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    @@unique([provider, providerAccountId])
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
 }
 
 model Session {
-    id           String   @id @default(cuid())
-    sessionToken String   @unique
-    userId       String
-    expires      DateTime
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id           String   @id @default(cuid()) @map("_id")
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    role          UserPermissionRole @default(USER) 
-    accounts      Account[]
-    sessions      Session[]
-    posts         Post[]
+  id            String             @id @default(cuid()) @map("_id")
+  name          String?
+  email         String?            @unique
+  emailVerified DateTime?
+  password      String
+  image         String?
+  role          UserPermissionRole @default(USER)
+  accounts      Account[]
+  sessions      Session[]
+
+  @@map("users")
 }
 
 model VerificationToken {
-    identifier String
-    token      String   @unique
-    expires    DateTime
+  id         String   @id @default(cuid()) @map("_id")
+  identifier String
+  token      String   @unique
+  expires    DateTime
 
-    @@unique([identifier, token])
+  @@unique([identifier, token])
+  @@map("verificationTokens")
 }
 
+model GuestProfile {
+  id                   String        @id @default(cuid()) @map("_id")
+  name                 String
+  email                String
+  userId               String
+  alternativeEmail     String
+  mobileNo             String
+  alternativeMobileNo  String
+  identity_card_type   IDCardType
+  id_card_no           String
+  fatherHusbandName    String
+  nationality          Nationality
+  religion             Religion
+  typeOrg              TypeOrg
+  designation          String
+  orgName              String
+  orgEmail             String
+  orgPhone             String
+  orgWebsite           String
+  residentialCity      String
+  residentialDistt     String
+  residentialState     State
+  country              Country
+  orgAddress           String
+  physicallyChallenged Answer
+  gender               Gender
+  category             Category
+  localAddress         String
+  permanentAddress     String
+  dob                  DateTime
+  maritalStatus        MaritalStatus
+  remark               String
+  updateBy             String        @default("Candidate")
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
 
-enum UserPermissionRole {
- USER
- ADMIN
- CREATOR
+  @@map("guestProfiles")
+}
+
+model BookingDetails {
+  id                     String        @id @default(cuid()) @map("_id")
+  guestName              String
+  guestEmail             String
+  guestMobileNo          String
+  guestIdCardType        IDCardType
+  guestIdCardNo          String
+  guestIdCardUploaded    Answer
+  guestAddress           String
+  guestOfficeAdd         String
+  guestDesignation       String
+  guestType              TypeOrg
+  guestProfileId         String
+  bookingOrderNo         String
+  bookingStatus          BookingStatus
+  hostelName             GuestHouse
+  roomTarrif             RoomTariff
+  nosRoom                String
+  nosguest               String
+  updateBy               String        @default("Candidate")
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+  bookingPersonName      String
+  bookingPersonMobileNo  String
+  bookingPersonEmail     String
+  bookingDate            DateTime
+  bookedFromDt           DateTime
+  bookedToDt             DateTime
+  remark                 String
+  bookingPersonProfileId String
+  bookPaymentId          String
+
+  @@map("bookingDetails")
+}
+
+model RoomDetails {
+  id                String         @id @default(cuid()) @map("_id")
+  code              String
+  value             String
+  ghName            String
+  roomType          RoomType
+  occupancy         Occupancy
+  floor             Floor
+  ac                Answer
+  geaser            Answer
+  airCooled         Answer
+  maxAdult          String
+  maxChild          String
+  remark            String
+  updateBy          String
+  updateDt          String
+  roomTarrif        RoomTariff
+  rentPerDay        String
+  taxes             String
+  totalChargePerDay String
+  bookingStatus     BookingStatus
+  cleaningStatus    CleaningStatus
+  lastCleaningDate  DateTime
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  @@map("roomDetails")
 }

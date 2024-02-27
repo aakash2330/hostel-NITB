@@ -40,6 +40,10 @@ export const authOptions: NextAuthOptions = {
 
 
 
+  pages: {
+    signIn: '/login',
+    signOut: '/',
+  },
   session: {
     strategy: 'jwt',
   },
@@ -50,6 +54,7 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      allowDangerousEmailAccountLinking: true,
     }),
 
     CredentialsProvider({
@@ -59,23 +64,32 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
 
-      async authorize(credentials, req) {
-        if (!credentials) {
-          return null;
-        }
-        const username = credentials.email;
-        const password = credentials.password;
+      async authorize(credentials, request) {
+        if (!credentials) return null;
 
-        if (username == "admin" && password == "admin") {
-          return {
-            id: "adminId",
-            email: "adminEmail",
-            role: "USER",
-            name: "admin"
-          };
-        } else {
+        // console.log('Inside credentials Provider', credentials);
+
+        const user = await db.user.findUnique({
+          where: {
+            email: credentials.email,
+          },
+        });
+        // console.log('user:', user);
+
+        if (!user) {
+          // User does not exists ...
+          console.log("User or its credentials doesn't exist");
           return null;
         }
+        if (credentials.password == user.password) {
+          return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+          };
+        }
+        return null;
       },
     }),
   ],
@@ -101,6 +115,16 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id;
       }
       return token;
+    },
+
+    async redirect({ url, baseUrl }) {
+      // console.log('url', url);
+      // console.log('baseUrl', baseUrl);
+      // Allows relative callback URLs
+      if (url.startsWith('/')) return `${baseUrl}${url}`;
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
     },
   },
 };

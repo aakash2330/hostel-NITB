@@ -1,5 +1,6 @@
 'use client';
 
+import { api } from "~/trpc/server";
 import Footer from "../_components/footer";
 
 export default function CartWithItem() {
