@@ -28,7 +28,7 @@ export default function RootLayout({
         <main className="relative flex flex-col min-h-screen">
           <Providers>
             <Navbar />
-            <div className="flex-grow px-[20%] py-10 flex-1  min-w-full overflow-hidden">{children}</div>
+            <div className="flex-grow px-[20%] py-10 flex-1 bg-red-200 w-fit overflow-hidden">{children}</div>
             <Footer />
             <Toaster />
           </Providers>
