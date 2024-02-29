@@ -9,7 +9,7 @@ import AccountDropdown from '../account-dropdown';
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   return (
-    <nav className="">
+    <nav className="w-full">
       {/* <NavbarAnnouncement />
       <NavbarTop />
       <NavbarBottom /> */}
@@ -43,25 +43,18 @@ const Navbar = () => {
         </Dialog>
       </Transition.Root>
 
-      <header className="relative bg-white">
+      <header className="">
         <nav
           aria-label="Top"
-          className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
+          className="mx-auto   px-4 sm:px-6 lg:px-8"
         >
           <div className="border-b border-gray-200">
             <div className="flex h-16 items-center justify-between">
               <div className="flex flex-1 items-center lg:hidden">
-                <button
-                  type="button"
-                  className="-ml-2 rounded-md bg-white p-2 text-gray-400"
-                  onClick={() => setOpen(true)}
-                >
-                  <span className="sr-only">Open menu</span>
-                </button>
               </div>
-              <div className='text-2xl font-bold cursor-pointer' onClick={() => { window.location.href = "/" }}>LOGO</div>
+              <div className='md:text-2xl mx-2 font-bold cursor-pointer' onClick={() => { window.location.href = "/" }}>LOGO</div>
               {/* Flyout menus */}
-              <div className="flex justify-center w-full  items-center h-full gap-[15%]">
+              <div className="flex justify-center w-full  items-center h-full gap-5 sm:gap-[15%]">
                 {NavBarData.pages.map((page) => (
                   <a
                     key={page.name}
@@ -72,7 +65,7 @@ const Navbar = () => {
                   </a>
                 ))}
               </div>
-              <Button className='rounded-3xl w-[20%]'>Contact Us</Button>
+              <Button className='rounded-3xl mx-2  sm:w-[20%]'>Contact Us</Button>
               <AccountDropdown ></AccountDropdown>
             </div>
           </div>

@@ -24,11 +24,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>
+      <body className={`relative h-full font-sans ${inter.variable}`}>
         <main className="relative flex flex-col min-h-screen">
           <Providers>
             <Navbar />
-            <div className="flex-grow px-[20%] py-10 flex-1">{children}</div>
+            <div className="flex-grow px-[20%] py-10 flex-1  min-w-full overflow-hidden">{children}</div>
             <Footer />
             <Toaster />
           </Providers>
