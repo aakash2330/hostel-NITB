@@ -49,12 +49,13 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt',
   },
   adapter: PrismaAdapter(db),
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: env.NEXTAUTH_SECRET,
+
   providers: [
 
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+      clientId: env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: env.GOOGLE_CLIENT_SECRET ?? "",
       allowDangerousEmailAccountLinking: true,
 
       profile(profile, token) {
