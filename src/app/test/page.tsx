@@ -4,6 +4,7 @@
 //  return <BookingConfirmationDrawer></BookingConfirmationDrawer>
 //}
 import Navbar from "../_components/navbar/navbar";
+import { env } from "~/env";
 import ProductHeroSlider from "../_components/single-hostel";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
@@ -21,6 +22,12 @@ export default async function Page() {
       <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
       </h1>
       <div className="flex flex-col items-center gap-2">
+
+        {JSON.stringify({
+
+          clientId: env.GOOGLE_CLIENT_ID,
+          clientSecret: env.GOOGLE_CLIENT_SECRET,
+        })}
         {JSON.stringify(session)}
         <div className="flex flex-col items-center justify-center gap-4">
           <p className="text-center text-2xl text-white">
