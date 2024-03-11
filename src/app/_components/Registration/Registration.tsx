@@ -119,7 +119,7 @@ export default function RegisterComponent({
 
   return (
     <>
-      <form className="space-y-6 w-[25rem] " onSubmit={handleSubmit(onSubmit)}>
+      <form className="space-y-6 md:w-[25%] w-full" onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label
             htmlFor="name"

@@ -12,10 +12,10 @@ export default function Home() {
   return (
 
     <main className="flex flex-col justify-center items-center gap-16">
-      <section className="flex flex-col gap-2 justify-center items-center text-center w-[70rem]">
+      <section className="flex flex-col gap-2 justify-center items-center text-center">
         <div className="font-bold text-primary text-3xl">NATIONAL INSTITUTE OF</div>
         <div> TECHNICAL TEACHERS' TRAINING AND RESEARCH, BHOPAL</div>
-        <div className="text-sm">National Institute of Technical Teachers' Training and Research, Bhopal is a unique premier institution, established in 1965 by Ministry of Education, Government of India for teacher training and improving quality of entire gamut of Technical Education System.</div>
+        <div className="text-sm text-wrap">National Institute of Technical Teachers' Training and Research, Bhopal is a unique premier institution, established in 1965 by Ministry of Education, Government of India for teacher training and improving quality of entire gamut of Technical Education System.</div>
       </section>
       <section>
         <CarouselPlugin></CarouselPlugin>
@@ -38,14 +38,14 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="flex justify-center space-x-4 py-5 overflow-x-auto">
+        <div className="grid grid-cols-3 justify-center space-x-4 py-5 overflow-x-auto">
           {Choices.map((item) => (
-            <div key={item.id} className="space-y-1 shrink-0 cursor-pointer">
+            <div key={item.id} className="space-y-1 col-span-3 md:col-span-1  cursor-pointer">
               <Image
                 width={400}
                 height={400}
                 key={item.id}
-                className="w-80 h-72 object-cover rounded-lg pb-2"
+                className="w-80  h-72 object-cover rounded-lg pb-2"
                 src={item.src}
                 alt=""
               />

@@ -3,46 +3,23 @@
 'use client';
 import { Disclosure } from '@headlessui/react';
 import { UserIcon } from "lucide-react"
-import { zodResolver } from '@hookform/resolvers/zod';
 import { BookingStatus, GuestHouse, GuestProfile, RoomDetails } from '@prisma/client';
-import { Answer, Category, Country, Gender, IDCardType, MaritalStatus, Nationality, Religion, State, TypeOrg } from "@prisma/client";
+import { TypeOrg } from "@prisma/client";
 import { useSession } from 'next-auth/react';
-import Link from 'next/link';
-import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '~/components/ui/button';
 import { Checkbox } from "~/components/ui/checkbox"
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form"
-import { Input } from '~/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select"
 import { useToast } from '~/components/ui/use-toast';
 import { api } from '~/trpc/react';
 import { CreateGuestValidator, TCreateGuestValidator } from '~/utils/validators/guestValidators';
-import { stat } from 'fs';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import GuestForm from '../guests/guestForm';
 
 
 export default function Checkout({ roomDetails }: { roomDetails: RoomDetails }) {
@@ -50,12 +27,6 @@ export default function Checkout({ roomDetails }: { roomDetails: RoomDetails }) 
   const [selectedGuests, setSelectedGuests] = useState<GuestProfile[]>([])
   const { toast } = useToast()
   const { data: session } = useSession();
-  const createGuestMutation = api.guests.createGuest.useMutation({
-    onSuccess: async ({ guest }) => {
-      console.log({ guest })
-      window.location.reload()
-    }
-  })
 
   const createBookingMutation = api.booking.createBooking.useMutation({
     onSuccess: async ({ bookingDetails }) => {
@@ -75,84 +46,7 @@ export default function Checkout({ roomDetails }: { roomDetails: RoomDetails }) 
     }
   })
 
-  const form = useForm<z.infer<typeof CreateGuestValidator>>({
-    resolver: zodResolver(CreateGuestValidator),
-    defaultValues: {
-      name: "",
-      email: "",
-      alternativeEmail: "",
-      mobileNo: "",
-      alternativeMobileNo: "",
-      typeOrg: "PRIVATE",
-      orgEmail: "",
-      orgPhone: "",
-      physicallyChallenged: "NO",
-      orgAddress: "",
-      country: "INDIA",
-      residentialCity: "",
-      residentialDistt: "",
-      residentialState: "MAHARASTRA",
-      orgName: "",
-      orgWebsite: "",
-      designation: "",
-      nationality: "NRI",
-      religion: "HINDU",
-      fatherHusbandName: "",
-      id_card_no: "",
-      identity_card_type: "AADHAR",
-      maritalStatus: "MARRIED",
-      remark: "",
-      dob: new Date(),
-      permanentAddress: "",
-      localAddress: "",
-      category: "SC",
-      gender: "MALE",
-    }
-  })
-  const x: TCreateGuestValidator = {
-    name: "",
-    email: "",
-    alternativeEmail: "",
-    mobileNo: "",
-    alternativeMobileNo: "",
-    typeOrg: "PRIVATE",
-    orgEmail: "",
-    orgPhone: "",
-    physicallyChallenged: "NO",
-    orgAddress: "",
-    country: "INDIA",
-    residentialCity: "",
-    residentialDistt: "",
-    residentialState: "MAHARASTRA",
-    orgName: "",
-    orgWebsite: "",
-    designation: "",
-    nationality: "NRI",
-    religion: "HINDU",
-    fatherHusbandName: "",
-    id_card_no: "",
-    identity_card_type: "AADHAR",
-    maritalStatus: "MARRIED",
-    remark: "",
-    dob: new Date(),
-    permanentAddress: "",
-    localAddress: "",
-    category: "SC",
-    gender: "MALE",
-  }
 
-  function onSubmit(data: z.infer<typeof CreateGuestValidator>) {
-    console.log({ data })
-    createGuestMutation.mutate(data)
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
-  }
 
   useEffect(() => { getGuestsMutation.mutate({ userId: session?.user.id ?? "" }) }, [])
   return (
@@ -315,284 +209,7 @@ export default function Checkout({ roomDetails }: { roomDetails: RoomDetails }) 
         </section>
         <Dialog>
           <DialogContent className="no-scrollbar  p-10 flex justify-center items-center flex-wrap text-gray-600 " style={{ width: "50%", height: "90%", overflow: "auto" }}>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6 ">
-                {Object.keys(x).map((key: any, index) => {
-                  if (key != "typeOrg" && key != "physicallyChallenged" && key != "maritalStatus" && key != "residentialState" && key != "nationality" && key != "identity_card_type" && key != "gender" && key != "category" && key != "religion" && key != "country" && key != "userId") {
-                    return <FormField
-                      control={form.control}
-                      key={key + index}
-                      name={key}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{key}</FormLabel>
-                          <FormControl>
-                            <Input placeholder={key} {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                  }
-                })}
-                <FormField
-                  control={form.control}
-                  name="typeOrg"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>typeOrg</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a typeOrg" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {Object.keys(TypeOrg).map((t, index) => {
-                            return <SelectItem key={t + index} value={t}>{t}</SelectItem>
-
-                          })}
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        You can manage email addresses in your{" "}
-                        <Link href="/examples/forms">email settings</Link>.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="physicallyChallenged"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Physically Challenged</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select if physically challenged" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {Object.keys(Answer).map((p, index) => {
-                            return <SelectItem key={p + index} value={p}>{p}</SelectItem>
-                          })}
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        Indicate if you have any physical challenges for appropriate accommodations.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                /><FormField
-                  control={form.control}
-                  name="maritalStatus"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Marital Status</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select your marital status" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {Object.keys(MaritalStatus).map((m, index) => {
-                            return <SelectItem key={m + index} value={m}>{m}</SelectItem>
-                          })}
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        Your marital status helps us to provide better services tailored to your needs.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="nationality"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Nationality</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select your nationality" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {Object.keys(Nationality).map((n, index) => (
-                            <SelectItem key={n + index} value={n}>{n}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        Your nationality is required for demographic purposes.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="residentialState"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Residential State</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select your residential state" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {Object.keys(State).map((state, index) => (
-                            <SelectItem key={state + index} value={state}>{state}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        Select the state of your permanent residence.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="country"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Country</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select your country" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {Object.keys(Country).map((country, index) => (
-                            <SelectItem key={country + index} value={country}>{country}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        Choose the country of your citizenship. This is required for legal and administrative purposes.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="religion"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Religion</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select your religion" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {Object.keys(Religion).map((religion, index) => (
-                            <SelectItem key={index + religion} value={religion}>{religion}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        Select your religion or belief system. This information is optional and for demographic purposes only.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="category"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Category</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select your category" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {Object.keys(Category).map((category, index) => (
-                            <SelectItem key={index + category} value={category}>{category}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        Select the category that best describes you or your organization.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="gender"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Gender</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select your gender" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {Object.keys(Gender).map((gender, index) => (
-                            <SelectItem key={gender + index} value={gender}>{gender}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        We ask for gender information for no other reason than to address you correctly.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="identity_card_type"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Identity Card Type</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select your ID card type" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {Object.keys(IDCardType).map((t, index) => (
-                            <SelectItem key={t + index} value={t}>{t}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        Choose the type of identification document you will provide.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-
-                <Button type="submit">Submit</Button>
-              </form>
-            </Form>
+            <GuestForm></GuestForm>
           </DialogContent>
           <section
             aria-labelledby="payment-heading"
@@ -630,7 +247,13 @@ export default function Checkout({ roomDetails }: { roomDetails: RoomDetails }) 
                 })]
               }}>Confirm Booking</Button>
             </div>
-            <DialogTrigger className='text-center w-full text-sm font-bold'>+ Add New Guest</DialogTrigger>
+            {!!guests.length && <DialogTrigger className='text-center w-full text-sm font-bold'>+ Add New Guest</DialogTrigger>}
+            <div className='w-full'>
+              <div className='text-lg'>Add Guests</div>
+              {!!!guests.length && <GuestForm></GuestForm>}
+            </div>
+
+
 
             <>
               {guests.map((g, index) => {

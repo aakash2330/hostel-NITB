@@ -11,6 +11,8 @@ import DiscordProvider from "next-auth/providers/discord";
 import { env } from "~/env";
 import { db } from "~/server/db";
 import { UserPermissionRole } from "@prisma/client";
+import { api } from "~/trpc/server";
+import { sendMail } from "~/lib/mail";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -55,6 +57,16 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       allowDangerousEmailAccountLinking: true,
+
+      profile(profile, token) {
+        console.log('token:', token);
+        return {
+          id: profile.sub,
+          name: `${profile.given_name}`,
+          email: profile.email,
+          role: UserPermissionRole.USER,
+        };
+      },
     }),
 
     CredentialsProvider({
@@ -87,6 +99,7 @@ export const authOptions: NextAuthOptions = {
             name: user.name,
             email: user.email,
             role: user.role,
+
           };
         }
         return null;
@@ -97,6 +110,8 @@ export const authOptions: NextAuthOptions = {
     async signIn({ account, profile }) {
       console.log('account', account);
       console.log('profile', profile);
+      const { success } = await sendMail();
+      console.log({ success })
       return true;
     },
     session: ({ session, token, user }) => {

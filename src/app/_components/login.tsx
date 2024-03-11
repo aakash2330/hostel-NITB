@@ -18,6 +18,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useToast } from '~/components/ui/use-toast';
 import Link from 'next/link';
+import LoginWithGoogle from './auth/loginWithGoogle';
 const FormSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6, {
@@ -46,8 +47,8 @@ export default function Login() {
       callbackUrl: '/',
     });
   }
-  return <Card className='flex p-7 flex-col gap-5 justify-center items-center text-sm'>
-    <div className='self-start'>Login or Signup</div>
+  return <Card className='flex p-2 md:p-7  flex-col gap-5 justify-center items-center text-sm'>
+    <div>Login or Signup</div>
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
         <FormField
@@ -80,28 +81,25 @@ export default function Login() {
           )}
         />
         <div>Forgot your Password</div>
-        <div className='flex w-full justify-start items-center gap-3'>
-          <Button type="submit" className='rounded-3xl w-[40%]'>Login</Button>
-          <div className='text-sm'>Continue With Email ?</div>
-          <Link className='w-[40%]' href="/registration">
-            <Button type="button" className='rounded-3xl w-[40%]'>Signup</Button>
+        <div className='grid grid-cols-2 w-full  gap-3'>
+          <Button type="submit" className='rounded-3xl col-span-1'>Login</Button>
+          <Link className='w-full' href="/registration">
+            <Button type="button" className='rounded-3xl col-span-1'>Signup</Button>
           </Link>
         </div>
 
       </form>
     </Form>
 
-    <div className='grid grid-cols-12 justify-center items-center w-full gap-1 text-xs'>
-      <div className='col-span-1 h-[1px] bg-gray-300'></div>
-      <div className='col-span-3 items-center justify-center flex'>
+    <div className='flex justify-center items-center w-full gap-1 text-xs'>
+      <div className='h-[1px] w-[30%] bg-gray-300'></div>
+      <div >
         Or Continue With
       </div>
-      <div className='col-span-7 h-[1px] bg-gray-300'></div>
+      <div className=' h-[1px] bg-gray-300 w-[30%]'></div>
     </div>
     <div className='flex justify-center w-full items-center gap-3'>
-      <Button className='rounded-3xl w-[25%]'>Facebook</Button>
-      <Button className='rounded-3xl w-[25%]'>Apple Id</Button>
-      <Button className='rounded-3xl w-[25%]'>Google</Button>
+      <LoginWithGoogle></LoginWithGoogle>
     </div>
   </Card >
 }

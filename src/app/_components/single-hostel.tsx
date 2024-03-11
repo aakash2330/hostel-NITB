@@ -34,7 +34,19 @@ const product = {
       alt: 'test',
     },
     {
-      id: 1,
+      id: 2,
+      name: 'Main',
+      src: 'https://plus.unsplash.com/premium_photo-1663126298656-33616be83c32?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      alt: 'test',
+    },
+    {
+      id: 3,
+      name: 'Main',
+      src: 'https://plus.unsplash.com/premium_photo-1663126298656-33616be83c32?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      alt: 'test',
+    },
+    {
+      id: 4,
       name: 'Main',
       src: 'https://plus.unsplash.com/premium_photo-1663126298656-33616be83c32?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       alt: 'test',
@@ -74,8 +86,8 @@ function ProductHeroSlider({ roomDetails }: { roomDetails: RoomDetails }) {
             {/* Image gallery */}
             <Tab.Group as="div" className="flex flex-col-reverse">
               {/* Image selector */}
-              <div className="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
-                <Tab.List className="grid grid-cols-4 gap-6">
+              <div className="mx-auto p-2 mt-6 w-full max-w-2xl lg:max-w-none">
+                <Tab.List className="grid grid-cols-4 gap-6 bg-violet-50">
                   {product.images.map((image, index) => (
                     <Tab
                       key={image.id + index}
@@ -101,6 +113,7 @@ function ProductHeroSlider({ roomDetails }: { roomDetails: RoomDetails }) {
                         </>
                       )}
                     </Tab>
+
                   ))}
                 </Tab.List>
               </div>
@@ -120,7 +133,7 @@ function ProductHeroSlider({ roomDetails }: { roomDetails: RoomDetails }) {
 
             {/* Product info */}
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-              <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+              <h1 className="text-lg md:text-3xl font-bold tracking-tight text-gray-900">
                 {roomDetails.code}
               </h1>
 

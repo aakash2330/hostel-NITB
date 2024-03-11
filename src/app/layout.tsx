@@ -25,12 +25,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`relative h-full font-sans ${inter.variable}`}>
-        <main className="relative flex flex-col min-h-screen">
+        <main className="relative flex flex-col min-h-screen " style={{ width: "100%" }}>
           <Providers>
             <Navbar />
-            <div className="flex-grow px-[20%] py-10 flex-1 bg-red-200 w-fit overflow-hidden">{children}</div>
-            <Footer />
+            <div className=" px-[10%] py-10 h-full  w-full overflow-hidden">{children}</div>
             <Toaster />
+            <Footer />
           </Providers>
         </main>
       </body>
