@@ -13,8 +13,10 @@ import { CreateGuestValidator } from "~/utils/validators/guestValidators";
 
 export const mailRouter = createTRPCRouter({
   sendMail: protectedProcedure
+    .input(z.object({ subject: z.string(), text: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      return await sendMail();
+      const { subject, text } = input
+      return await sendMail({ subject, text });
     }),
 
 });

@@ -56,7 +56,7 @@ const Navbar = () => {
 
                   <Link className='mb-5' href={"https://nitttrbpl.ac.in"}>
                     <div className='size-24 relative ' >
-                      <Image src={logo} alt='logo'></Image>
+                      <Image priority src={logo} alt='logo'></Image>
                     </div>
                   </Link>
 
@@ -137,9 +137,10 @@ export default Navbar;
 
 export const NavBarData = {
   pages: [
-    { name: 'Institute', href: '/' },
-    { name: 'Contact Us', href: '/' },
+
+    { name: 'Home', href: '/' },
+    { name: 'Institute', href: "https://nitttrbpl.ac.in" },
+    { name: 'Contact Us', href: '/contactus' },
     { name: 'Gallery', href: '/' },
-    { name: 'Accomodations', href: '/' },
   ],
 };

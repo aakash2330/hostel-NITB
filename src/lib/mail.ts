@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-export async function sendMail() {
+export async function sendMail({ subject, text }: { subject: string, text: string }) {
   try {
     const transporter = nodemailer.createTransport({
       service: 'Gmail',
@@ -12,8 +12,8 @@ export async function sendMail() {
     const mailOptions = {
       from: 'aakash2330@gmail.com',
       to: 'aakash2330@gmail.com',
-      subject: 'Registration NITTTR',
-      text: 'You have successfull logged into NITTTR/hostels',
+      subject,
+      text: text,
     };
 
     // Send the email

@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "~/components/ui/button";
@@ -52,17 +52,23 @@ export const formSchema = z.object({
 
 function SearchForm() {
   const router = useRouter();
-
+  const searchParams = useSearchParams()
+  const xcheckIn = searchParams.get('checkin')
+  const xcheckOut = searchParams.get('checkout')
+  const xchildren = searchParams.get('group_children')
+  const xAdults = searchParams.get('group_adults')
+  const xguests = { children: xchildren, adults: xAdults }
+  const xlocation = searchParams.get('location')
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      location: "",
+      location: xlocation ?? "",
       dates: {
-        from: new Date(),
-        to: new Date(),
+        from: xcheckIn ? new Date(xcheckIn?.toString()) : new Date(),
+        to: xcheckOut ? new Date(xcheckOut?.toString()) : new Date(),
       },
-      adults: "1",
-      children: "0",
+      adults: xAdults ?? "1",
+      children: xchildren ?? "0",
       rooms: "1",
     },
   });
