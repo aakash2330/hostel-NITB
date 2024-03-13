@@ -73,7 +73,6 @@
     "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.5.7",
     "prisma": "^5.6.0",
-    "react-credit-cards": "^0.8.3",
     "tailwindcss": "^3.3.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
