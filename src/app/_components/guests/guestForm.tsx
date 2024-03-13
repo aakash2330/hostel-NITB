@@ -27,9 +27,7 @@ import { Button } from "~/components/ui/button";
 import Link from "next/link";
 
 export default function GuestForm() {
-
   const { toast } = useToast()
-
   const form = useForm<z.infer<typeof CreateGuestValidator>>({
     resolver: zodResolver(CreateGuestValidator),
     defaultValues: {

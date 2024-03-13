@@ -39,7 +39,7 @@ export const roomRouter = createTRPCRouter({
 
   getRoomsByGuestHouse: publicProcedure
     .input(z.object({ guestHouse: z.custom<GuestHouse>() }))
-    .mutation(async ({ ctx, input }) => {
+    .query(async ({ ctx, input }) => {
       console.log(ctx.session)
       const roomDetails = await ctx.db.roomDetails.findMany({
         where: {

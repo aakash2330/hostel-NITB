@@ -9,7 +9,8 @@ export default async function Page({
 
   const { roomDetails } = await api.room.getRoomById.mutate({ hostelId: searchParams?.id as string })
   if (roomDetails) {
-    return <Checkout roomDetails={roomDetails}></Checkout>
+    return <Checkout roomDetails={roomDetails}>
+    </Checkout>
   }
   else {
     return <div>INVALID ROOM ID</div>

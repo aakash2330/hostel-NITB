@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { RecentBookings } from "~/app/_components/admin/RecentBookings";
 import { Button } from "~/components/ui/button";
 import {
@@ -29,7 +30,7 @@ export default async function Page({
               Admin Dashboard
             </h2>
             <div className="hidden md:flex items-center space-x-2">
-              <Button>Download</Button>
+              <Button><Link href={"/admin/bookings/create"} >Create Booking</Link></Button>
             </div>
           </div>
           <Tabs defaultValue="overview" className="space-y-4">
@@ -139,7 +140,7 @@ export default async function Page({
               Admin Dashboard
             </h2>
             <div className="hidden md:flex items-center space-x-2">
-              <Button>Download</Button>
+              <Button><Link href={"/admin/bookings/create"} >Create Booking</Link></Button>
             </div>
           </div>
           <Tabs defaultValue="overview" className="space-y-4">

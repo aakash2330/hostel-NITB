@@ -15,6 +15,7 @@ import SearchForm from '../SearchForm';
 import { router } from '@trpc/server';
 
 const SearchPage = () => {
+
   const searchParams = useSearchParams()
   const xcheckIn = searchParams.get('checkin')
   const xcheckOut = searchParams.get('checkout')
@@ -27,7 +28,10 @@ const SearchPage = () => {
   const [checkIn, setCheckIn] = useState<Date>();
   const [checkOut, setCheckOut] = useState<Date>();
   const [guests, setGuests] = useState<Object>();
+
   const [roomDetails, setRoomDetails] = useState<RoomDetails[]>()
+
+
   useEffect(() => {
     setLocation(xlocation?.toString()!);
     if (xcheckIn) setCheckIn(new Date(xcheckIn?.toString()));
@@ -45,16 +49,12 @@ const SearchPage = () => {
     if (dates) return `• ${dates}`;
   };
 
-  const roomDetailsMutation = api.room.getRoomsByGuestHouse.useMutation({
-    onSuccess: async ({ roomDetails }) => {
-      console.log({ roomDetails })
-      setRoomDetails(roomDetails)
-    }
-  })
-  console.log({ roomDetails })
-  useEffect(() => {
-    roomDetailsMutation.mutate({ guestHouse: xlocation })
-  }, [])
+  const { data } = api.room.getRoomsByGuestHouse.useQuery({ guestHouse: xlocation },
+    {
+      onSuccess: async ({ roomDetails }) => {
+        setRoomDetails(roomDetails)
+      }
+    })
 
   return (
     <div className="flex flex-col min-h-screen">

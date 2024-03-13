@@ -28,6 +28,7 @@ import {
   SelectValue,
 } from "~/components/ui/select"
 import { GuestHouse } from "@prisma/client";
+import { api } from "~/trpc/react";
 
 
 export const formSchema = z.object({
@@ -51,6 +52,8 @@ export const formSchema = z.object({
 });
 
 function SearchForm() {
+
+  const utils = api.useContext();
   const router = useRouter();
   const searchParams = useSearchParams()
   const xcheckIn = searchParams.get('checkin')
@@ -96,7 +99,7 @@ function SearchForm() {
 
     // Use only the path and the constructed query string for navigation
     router.push(`/search?${queryParameters.toString()}`);
-
+    utils.room.getRoomsByGuestHouse.invalidate()
   }
 
 
