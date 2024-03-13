@@ -1,5 +1,5 @@
 'use client';
-
+import { useSession } from 'next-auth/react';
 import React from 'react';
 import {
   Accordion,
@@ -7,7 +7,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "~/components/ui/accordion"
-
 import { Fragment, useState } from 'react';
 import {
   Tab,
@@ -32,7 +31,7 @@ const roomFeatures = {
 }
 
 function ProductHeroSlider({ roomDetails }: { roomDetails: RoomDetails }) {
-  console.log({ roomDetails })
+  const { data: session } = useSession();
   const [open, setOpen] = useState(false);
   console.log('inside');
   return (
@@ -125,7 +124,7 @@ function ProductHeroSlider({ roomDetails }: { roomDetails: RoomDetails }) {
                 {/* Colors */}
 
                 <div className="mt-10 flex">
-                  <Link href={`/checkout?id=${roomDetails.id}`} className='w-full'>
+                  <Link href={session ? `/checkout?id=${roomDetails.id}` : "/login"} className='w-full'>
                     <button
                       type="submit"
                       className="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-primary px-8 py-3 text-base font-medium text-white hover:bg-primary focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full"

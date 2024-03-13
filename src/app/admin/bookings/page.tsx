@@ -18,7 +18,6 @@ export default async function Page({
 }) {
   const paymentId = searchParams?.id
   if (paymentId) {
-
     const { booking } = await api.booking.getBookingByID.mutate({ id: paymentId as string })
 
     return (

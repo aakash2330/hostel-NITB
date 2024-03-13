@@ -35,7 +35,8 @@ export default function Checkout({ roomDetails }: { roomDetails: RoomDetails }) 
         title: "Booking Successful",
         description: "200",
       })
-      setTimeout(() => { window.location.href = "/" }, 2000)
+
+      setTimeout(() => { window.location.href = "/payment" })
     }
   })
 
@@ -115,7 +116,7 @@ export default function Checkout({ roomDetails }: { roomDetails: RoomDetails }) 
                   <dl className="mt-10 space-y-6 text-sm font-medium text-gray-500">
                     <div className="flex justify-between">
                       <dt>Subtotal</dt>
-                      <dd className="text-gray-900">₹{100}</dd>
+                      <dd className="text-gray-900">₹{roomDetails.totalChargePerDay}</dd>
                     </div>
                     <div className="flex justify-between">
                       <dt className="flex">
@@ -124,15 +125,11 @@ export default function Checkout({ roomDetails }: { roomDetails: RoomDetails }) 
                           {"DISCOUNT CODE"}
                         </span>
                       </dt>
-                      <dd className="text-gray-900">₹{100}</dd>
+                      <dd className="text-gray-900">₹{0}</dd>
                     </div>
                     <div className="flex justify-between">
                       <dt>Taxes</dt>
-                      <dd className="text-gray-900">₹{100}</dd>
-                    </div>
-                    <div className="flex justify-between">
-                      <dt>Shipping</dt>
-                      <dd className="text-gray-900">₹{100}</dd>
+                      <dd className="text-gray-900">₹{180}</dd>
                     </div>
                   </dl>
                 </Disclosure.Panel>
@@ -181,7 +178,7 @@ export default function Checkout({ roomDetails }: { roomDetails: RoomDetails }) 
             <dl className="mt-10 space-y-6 text-sm font-medium text-gray-500">
               <div className="flex justify-between">
                 <dt>Subtotal</dt>
-                <dd className="text-gray-900">₹{100}</dd>
+                <dd className="text-gray-900">₹{roomDetails.totalChargePerDay}</dd>
               </div>
               <div className="flex justify-between">
                 <dt className="flex">
@@ -190,19 +187,15 @@ export default function Checkout({ roomDetails }: { roomDetails: RoomDetails }) 
                     {"DISCOUNT CODE"}
                   </span>
                 </dt>
-                <dd className="text-gray-900">₹{100}</dd>
+                <dd className="text-gray-900">₹{0}</dd>
               </div>
               <div className="flex justify-between">
                 <dt>Taxes</dt>
-                <dd className="text-gray-900">₹{100}</dd>
-              </div>
-              <div className="flex justify-between">
-                <dt>Shipping</dt>
-                <dd className="text-gray-900">₹{100}</dd>
+                <dd className="text-gray-900">₹{180}</dd>
               </div>
               <div className="flex items-center justify-between border-t border-gray-200 pt-6 text-gray-900">
                 <dt className="text-base">Total</dt>
-                <dd className="text-gray-900">₹{100}</dd>
+                <dd className="text-gray-900">₹{roomDetails.totalChargePerDay}</dd>
               </div>
             </dl>
           </div>
@@ -249,7 +242,6 @@ export default function Checkout({ roomDetails }: { roomDetails: RoomDetails }) 
             </div>
             {!!guests.length && <DialogTrigger className='text-center w-full text-sm font-bold'>+ Add New Guest</DialogTrigger>}
             <div className='w-full'>
-              <div className='text-lg'>Add Guests</div>
               {!!!guests.length && <GuestForm></GuestForm>}
             </div>
 
