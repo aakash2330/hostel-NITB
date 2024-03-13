@@ -14,7 +14,6 @@ export default function Home() {
       <section className="flex flex-col gap-2 justify-center items-center text-center">
         <div className="font-bold text-primary text-xl md:text-3xl">NATIONAL INSTITUTE OF</div>
         <div className="font-bold text-primary text-xl md:text-3xl"> TECHNICAL TEACHERS TRAINING AND RESEARCH, BHOPAL</div>
-        <div className="text-sm text-wrap">National Institute of Technical Teachers Training and Research, Bhopal is a unique premier institution, established in 1965 by Ministry of Education, Government of India for teacher training and improving quality of entire gamut of Technical Education System.</div>
         <div className="text-sm text-wrap">Estd in 1965 by the Ministry of Education, Government of India, NITTTR, Bhopal stands as a distinguished Deemed University training teachers and enhancing the overall quality of the Technical Education System. Our commitment extends to the continual improvement of educational standards.</div>
       </section>
       <section>
