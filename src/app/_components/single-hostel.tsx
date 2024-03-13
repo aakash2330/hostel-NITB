@@ -33,7 +33,6 @@ const roomFeatures = {
 function ProductHeroSlider({ roomDetails }: { roomDetails: RoomDetails }) {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
-  console.log('inside');
   return (
     <div className="bg-white">
       <main className="mx-auto max-w-7xl sm:px-6 sm:pt-16 lg:px-8">

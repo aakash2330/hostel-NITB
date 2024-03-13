@@ -12,6 +12,7 @@ import { signIn } from 'next-auth/react';
 import { api } from '~/trpc/react';
 import { useToast } from '~/components/ui/use-toast';
 import { ToastAction } from '~/components/ui/toast';
+import { Button } from '~/components/ui/button';
 
 
 export const AuthCredentialsValidator = z
@@ -241,12 +242,12 @@ export default function RegisterComponent({
         </div>
 
         <div>
-          <button
+          <Button
             type="submit"
-            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className="flex w-full justify-center rounded-md  px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
             Register
-          </button>
+          </Button>
         </div>
       </form>
     </>
