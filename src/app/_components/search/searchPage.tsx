@@ -59,7 +59,7 @@ const SearchPage = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <main
-        className={`  grid grid-cols-1  duration-500`}
+        className={` grid grid-cols-1  duration-500`}
       >
 
         <SearchForm />

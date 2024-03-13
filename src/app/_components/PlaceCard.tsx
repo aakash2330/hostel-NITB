@@ -8,7 +8,9 @@ const AppPlaceCard = ({ data, img }: { data: RoomDetails, img: any }) => {
     <div className="grid sm:grid-cols-[300px,1fr] py-5 cursor-pointer grid-cols-1 gap-x-4">
       {/* left - image */}
       <div className="relative w-full mb-2 md:mb-0 sm:h-44 h-52 ">
-        <img
+        <Image
+          unoptimized
+          priority
           src={img}
           alt={data.value}
           width={100}
