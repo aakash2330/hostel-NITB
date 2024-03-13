@@ -6,18 +6,13 @@ import Image from 'next/image';
 import { formatGuests, formatRangeDate } from "~/utils";
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation'
-import { RoomDetails, RoomType } from '@prisma/client';
+import { GuestHouse, RoomDetails, RoomType } from '@prisma/client';
 import { api } from '~/trpc/react';
 import { Separator } from "~/components/ui/separator"
 
-import img1 from "public/IMG_5599.png"
-import img2 from "public/IMG_5621.png"
-import img3 from "public/IMG_5623.png"
-import img4 from "public/IMG_5624.png"
 import AppPlaceCard from '../PlaceCard';
 import SearchForm from '../SearchForm';
 import { router } from '@trpc/server';
-const imagesCollection = [img1, img2, img3, img4]
 
 const SearchPage = () => {
   const searchParams = useSearchParams()
@@ -26,7 +21,7 @@ const SearchPage = () => {
   const xchildren = searchParams.get('group_children')
   const xAdults = searchParams.get('group_adults')
   const xguests = { children: xchildren, adults: xAdults }
-  const xlocation = searchParams.get('location')
+  const xlocation = searchParams.get('location') as GuestHouse
 
 
   const [location, setLocation] = useState<string>('');
@@ -51,14 +46,14 @@ const SearchPage = () => {
     if (dates) return `• ${dates}`;
   };
 
-  const roomDetailsMutation = api.room.getAllRooms.useMutation({
+  const roomDetailsMutation = api.room.getRoomsByGuestHouse.useMutation({
     onSuccess: async ({ roomDetails }) => {
       console.log({ roomDetails })
       setRoomDetails(roomDetails)
     }
   })
   useEffect(() => {
-    roomDetailsMutation.mutate()
+    roomDetailsMutation.mutate({ guestHouse: xlocation })
   }, [])
 
   return (
@@ -77,7 +72,7 @@ const SearchPage = () => {
             {guests && getGuests(guests)}
           </span>
           {/* title */}
-          <h1 className="mb-2 text-2xl font-semibold md:text-3xl lg:text-4xl lg:mb-7">
+          <h1 className="mb-2 text-sm md:text-2xl font-semibold  lg:text-4xl lg:mb-7">
             Stays in {location}
           </h1>
           {/* filters */}
@@ -99,10 +94,9 @@ const SearchPage = () => {
           {/* list */}
           <section className='flex flex-col gap-5'>
             {roomDetails?.map((room, index) => (
-
               <div key={index}>
                 <Link href={`/hostel/${room.id}`}>
-                  <AppPlaceCard key={room.id} data={room} img={imagesCollection[index] ?? "https://plus.unsplash.com/premium_photo-1674676471380-1258cb31b3ac?q=80&w=2609&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} />
+                  <AppPlaceCard key={room.id} data={room} img={room.roomImg[index]} />
                 </Link>
                 <Separator />
               </div>

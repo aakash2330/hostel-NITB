@@ -1,8 +1,5 @@
 "use client"
 import SearchForm from "./_components/SearchForm";
-import img1 from "public/IMG_5599.png"
-import img2 from "public/IMG_5622.png"
-import img3 from "public/IMG_5624.png"
 import Image from "next/image";
 import { CarouselPlugin } from "./_components/Caraousal/Caraousal";
 import VipCard from "./_components/VipCard/VipCard";
@@ -39,9 +36,9 @@ export default function Home() {
         <div className="grid grid-cols-3 justify-center space-x-4 py-5 overflow-x-auto">
           {Choices.map((item) => (
             <div key={item.id} className="space-y-1 col-span-3 md:col-span-1  cursor-pointer">
-              <Image
-                width={400}
-                height={400}
+              <img
+                width={100}
+                height={100}
                 key={item.id}
                 className="w-80  h-72 object-cover rounded-lg pb-2"
                 src={item.src}
@@ -64,22 +61,22 @@ export default function Home() {
 const Choices = [
   {
     id: 1,
-    src: img1,
+    src: "https://aakash2330-drippy.s3.amazonaws.com/NITTTR/saran/fwdsaranguesthouselatestphotograph/_DSC0346+(2).JPG",
     title: "Saran Guest House",
     location: "",
     description: "",
   },
   {
     id: 2,
-    src: img2,
+    src: "https://aakash2330-drippy.s3.amazonaws.com/NITTTR/fwdviswesawraiyaguesthouse/_DSC0140.JPG",
     title: "Vishveshvaraya Guest House",
     location: "",
     description: "",
   },
   {
     id: 3,
-    src: img3,
-    title: "Chandrakant Hostel",
+    src: "https://aakash2330-drippy.s3.amazonaws.com/NITTTR/fwdexecutivehostelphotograph/DSC_1095.JPG",
+    title: "Executive Guest Houes",
     location: "",
     description: "",
   },

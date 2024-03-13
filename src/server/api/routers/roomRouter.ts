@@ -1,3 +1,4 @@
+import { GuestHouse } from "@prisma/client";
 import { z } from "zod";
 
 import {
@@ -31,6 +32,18 @@ export const roomRouter = createTRPCRouter({
       const roomDetails = await ctx.db.roomDetails.findFirst({
         where: {
           id: hostelId
+        }
+      })
+      return { roomDetails }
+    }),
+
+  getRoomsByGuestHouse: publicProcedure
+    .input(z.object({ guestHouse: z.custom<GuestHouse>() }))
+    .mutation(async ({ ctx, input }) => {
+      console.log(ctx.session)
+      const roomDetails = await ctx.db.roomDetails.findMany({
+        where: {
+          hostelName: input.guestHouse
         }
       })
       return { roomDetails }

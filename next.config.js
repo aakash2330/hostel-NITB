@@ -14,7 +14,9 @@ const config = {
       'static.displate.com',
       'myxtur.com',
       'plus.unsplash.com',
-      'images.unsplash.com'
+      'images.unsplash.com',
+      'aakash2330-drippy.s3.us-east-1.amazonaws.com',
+      'aakash2330-drippy.s3.amazonaws.com'
     ],
   }
 };

@@ -83,8 +83,8 @@ export default function Login() {
         <div>Forgot your Password</div>
         <div className='grid grid-cols-2 w-full  gap-3'>
           <Button type="submit" className='rounded-3xl col-span-1'>Login</Button>
-          <Link className='w-full' href="/registration">
-            <Button type="button" className='rounded-3xl col-span-1'>Signup</Button>
+          <Link className='w-full ' href="/registration">
+            <Button type="button" className='rounded-3xl w-full col-span-1'>Signup</Button>
           </Link>
         </div>
 

@@ -27,8 +27,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select"
+import { GuestHouse } from "@prisma/client";
 
-const guestHouses = ["Saran Guest House", "Vishveshvaraya Guest House", "Chandrakant Hostel"]
 
 export const formSchema = z.object({
   location: z.string().min(2, { message: "Please Select a Value" }),
@@ -123,7 +123,7 @@ function SearchForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {guestHouses.map((g, index) => {
+                    {Object.keys(GuestHouse).map((g, index) => {
                       return <SelectItem key={g + index} value={g}>{g}</SelectItem>
                     })}
                   </SelectContent>

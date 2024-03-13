@@ -141,6 +141,6 @@ export const NavBarData = {
     { name: 'Home', href: '/' },
     { name: 'Institute', href: "https://nitttrbpl.ac.in" },
     { name: 'Contact Us', href: '/contactus' },
-    { name: 'Gallery', href: '/' },
+    { name: 'Gallery', href: '/gallery' },
   ],
 };

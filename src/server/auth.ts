@@ -110,6 +110,7 @@ export const authOptions: NextAuthOptions = {
     async signIn({ account, profile }) {
       console.log('account', account);
       console.log('profile', profile);
+      // FIX:remove unnecessary mals
       const { success } = await sendMail({ subject: 'Registration NITTTR', text: 'You have successfull logged into NITTTR/hostels' });
       console.log({ success })
       return true;

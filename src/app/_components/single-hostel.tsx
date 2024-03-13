@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { ArrowDownNarrowWide } from "lucide-react"
 import {
   Accordion,
   AccordionContent,
@@ -11,67 +10,26 @@ import {
 
 import { Fragment, useState } from 'react';
 import {
-  Dialog,
-  Disclosure,
-  Popover,
-  RadioGroup,
   Tab,
-  Transition,
 } from '@headlessui/react';
 import { classNames } from '~/lib/classNames';
 import Link from 'next/link';
-import { RoomDetails } from '@prisma/client';
+import { GuestHouse, RoomDetails } from '@prisma/client';
 
-const product = {
-  name: 'Saran Guest House',
-  price: '₹2500',
-  rating: 4,
-  images: [
-    {
-      id: 1,
-      name: 'Main',
-      src: 'https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      alt: 'test',
-    },
-    {
-      id: 2,
-      name: 'Main',
-      src: 'https://plus.unsplash.com/premium_photo-1663126298656-33616be83c32?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      alt: 'test',
-    },
-    {
-      id: 3,
-      name: 'Main',
-      src: 'https://plus.unsplash.com/premium_photo-1663126298656-33616be83c32?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      alt: 'test',
-    },
-    {
-      id: 4,
-      name: 'Main',
-      src: 'https://plus.unsplash.com/premium_photo-1663126298656-33616be83c32?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-      alt: 'test',
-    },
-    // More images...
-  ],
-  description: `
-    <p>Nestled in the heart of Bhopal, Saran Guest House offers a vibrant, friendly, and comfortable stay for travelers from all corners of the globe. Whether you're backpacking through Bhopal, on a budget-friendly city break, or looking for a cozy spot to work and relax, our hostel is designed to cater to your needs.</p>
-  `,
-  details: [
-    {
-      name: 'Features',
-      items: [
-        'Feature 1',
-        'Feature 2',
-        'Feature 3',
-        'Feature 4',
-        'Feature 5',
-        'Feature 6',
-        'Feature 7',
-        'Feature 8',
-      ],
-    },
-  ],
-};
+const roomFeatures = {
+  EXECUTIVE_GUEST_HOUESE: {
+    description: "Experience comfort and convenience in our thoughtfully appointed single room at Saran Guesthouse, nestled within the serene campus of NITTTR Bhopal. Perfect for solo travelers seeking a peaceful retreat, our single room offers a cozy sanctuary equipped with modern amenities for a relaxing stay. Immerse yourself in tranquility while enjoying easy access to nearby attractions and facilities. Book your stay with us for a rejuvenating experience in the heart of Bhopal.",
+    features: ["Double Bed: Sink into plush bedding for a restful night's sleep", "Ensuite Bathroom: Enjoy the convenience of a private bathroom equipped with modern amenities.", "Workspace: Stay productive with a dedicated workspace, ideal for business travelers.", "Complimentary Wi-Fi: Stay connected with high-speed internet access throughout your stay.", "Air Conditioning: Stay cool and comfortable in any season."]
+  },
+  SARAN_GUEST_HOUSE: {
+    description: "Discover spacious and cozy double rooms at NITTTR Bhopal, ideal for couples or friends traveling together. Enjoy a comfortable stay with modern amenities. Book your room now!",
+    features: ["attached toilets and bathrooms", "It has separate kitchen and dining facility", " All the rooms are air conditioned and equipped with all modern amenities."]
+  },
+  VISHVESHVARAYA_GUEST_HOUSE: {
+    description: "It has G +1 floor with 26 double bedded rooms with attached toilets and bathrooms. It has separate kitchen and dining facility. All the rooms are air conditioned and equipped with all modern amenities.",
+    features: ["attached toilets and bathrooms", "It has separate kitchen and dining facility", " All the rooms are air conditioned and equipped with all modern amenities."]
+  }
+}
 
 function ProductHeroSlider({ roomDetails }: { roomDetails: RoomDetails }) {
   console.log({ roomDetails })
@@ -87,18 +45,18 @@ function ProductHeroSlider({ roomDetails }: { roomDetails: RoomDetails }) {
             <Tab.Group as="div" className="flex flex-col-reverse">
               {/* Image selector */}
               <div className="mx-auto p-2 mt-6 w-full max-w-2xl lg:max-w-none">
-                <Tab.List className="grid grid-cols-4 gap-6 bg-violet-50">
-                  {product.images.map((image, index) => (
+                <Tab.List className="grid grid-cols-4 gap-6 ">
+                  {roomDetails.roomImg.map((image, index) => (
                     <Tab
-                      key={image.id + index}
+                      key={image + index}
                       className="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
                     >
                       {({ selected }) => (
                         <>
-                          <span className="sr-only">{image.name}</span>
+                          <span className="sr-only">{image}</span>
                           <span className="absolute inset-0 overflow-hidden rounded-md">
                             <img
-                              src={image.src}
+                              src={image}
                               alt=""
                               className="h-full w-full object-cover object-center"
                             />
@@ -119,11 +77,11 @@ function ProductHeroSlider({ roomDetails }: { roomDetails: RoomDetails }) {
               </div>
 
               <Tab.Panels className="aspect-h-1 aspect-w-1 w-full">
-                {product.images.map((image, index) => (
-                  <Tab.Panel key={image.id + index}>
+                {roomDetails.roomImg.map((image, index) => (
+                  <Tab.Panel key={image + index}>
                     <img
-                      src={image.src}
-                      alt={image.alt}
+                      src={image}
+                      alt={image}
                       className="h-full w-full object-cover object-center sm:rounded-lg"
                     />
                   </Tab.Panel>
@@ -150,7 +108,7 @@ function ProductHeroSlider({ roomDetails }: { roomDetails: RoomDetails }) {
                 <div className="flex items-center">
                   <div className="flex items-center">
                   </div>
-                  <p className="sr-only">{product.rating} out of 5 stars</p>
+                  <p className="sr-only">{"product.rating"} out of 5 stars</p>
                 </div>
               </div>
 
@@ -159,7 +117,7 @@ function ProductHeroSlider({ roomDetails }: { roomDetails: RoomDetails }) {
 
                 <div
                   className="space-y-6 text-base text-gray-700"
-                  dangerouslySetInnerHTML={{ __html: product.description }}
+                  dangerouslySetInnerHTML={{ __html: roomFeatures[roomDetails.hostelName].description }}
                 />
               </div>
 
@@ -196,7 +154,7 @@ function ProductHeroSlider({ roomDetails }: { roomDetails: RoomDetails }) {
                   </AccordionItem>
                   <AccordionItem value="item-2">
                     <AccordionTrigger>Features</AccordionTrigger>
-                    {product.details[0]?.items.map((d, index) => {
+                    {roomFeatures[roomDetails.hostelName].features.map((d, index) => {
                       return <AccordionContent key={d + index}>
                         {d}
                       </AccordionContent>

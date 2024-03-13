@@ -130,7 +130,7 @@ enum BookingStatus {
 enum GuestHouse {
   SARAN_GUEST_HOUSE
   VISHVESHVARAYA_GUEST_HOUSE
-  CHANDRAKANT_HOSTEL
+  EXECUTIVE_GUEST_HOUESE
 }
 
 enum CleaningStatus {
@@ -285,6 +285,8 @@ model RoomDetails {
   ghName            String
   roomType          RoomType
   occupancy         Occupancy
+  roomImg           String[]
+  hostelName        GuestHouse
   floor             Floor
   ac                Answer
   geaser            Answer
