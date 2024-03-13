@@ -21,7 +21,7 @@ const AppPlaceCard = ({ data, img }: { data: RoomDetails, img: any }) => {
         {/* detail top */}
         <div className="flex-grow">
           <span className="text-sm text-gray-500">{data.value}</span>
-          <h3 className="text-sm truncate">{data.remark}</h3>
+          <h3 className="text-sm text-wrap truncate">{data.remark}</h3>
           <span className="text-sm text-gray-500">{data.roomType}</span>
         </div>
 
