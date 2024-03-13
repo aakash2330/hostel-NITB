@@ -16,7 +16,7 @@ import Link from 'next/link';
 import { GuestHouse, RoomDetails } from '@prisma/client';
 
 const roomFeatures = {
-  EXECUTIVE_GUEST_HOUESE: {
+  EXECUTIVE_GUEST_HOUSE: {
     description: "Experience comfort and convenience in our thoughtfully appointed single room at Saran Guesthouse, nestled within the serene campus of NITTTR Bhopal. Perfect for solo travelers seeking a peaceful retreat, our single room offers a cozy sanctuary equipped with modern amenities for a relaxing stay. Immerse yourself in tranquility while enjoying easy access to nearby attractions and facilities. Book your stay with us for a rejuvenating experience in the heart of Bhopal.",
     features: ["Double Bed: Sink into plush bedding for a restful night's sleep", "Ensuite Bathroom: Enjoy the convenience of a private bathroom equipped with modern amenities.", "Workspace: Stay productive with a dedicated workspace, ideal for business travelers.", "Complimentary Wi-Fi: Stay connected with high-speed internet access throughout your stay.", "Air Conditioning: Stay cool and comfortable in any season."]
   },

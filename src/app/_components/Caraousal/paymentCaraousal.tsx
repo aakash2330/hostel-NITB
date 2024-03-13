@@ -17,20 +17,22 @@ import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
 import Image from "next/image"
 import Link from "next/link"
+import { api } from "~/trpc/react"
 
 export function PaymentCarousel() {
-  const [api, setApi] = React.useState<CarouselApi>()
+  const [capi, setApi] = React.useState<CarouselApi>()
+  const sendMailMutation = api.mail.sendMail.useMutation()
 
   React.useEffect(() => {
-    if (!api) {
+    if (!capi) {
       return
     }
 
-    api.on("select", () => {
+    capi.on("select", () => {
       console.log("asd")
       // Do something on select.
     })
-  }, [api])
+  }, [capi])
 
   return (
     <div>
@@ -69,8 +71,51 @@ export function PaymentCarousel() {
                 <Image src={paymentLogo} alt="loading..." />
                 <div className="text-2xl">Payment Successful</div>
                 <Button>
-                  <Link href={"/"}>Done</Link>
-
+                  <Link onClick={() => {
+                    sendMailMutation.mutate({
+                      subject: "Payment Details",
+                      text: JSON.stringify({
+                        "paymentId": "123456789",
+                        "amount": 150.00,
+                        "currency": "USD",
+                        "paymentMethod": "credit_card",
+                        "cardDetails": {
+                          "cardNumber": "XXXX-XXXX-XXXX-1234",
+                          "cardHolderName": "John Doe",
+                          "expiryDate": "12/23",
+                          "cvv": "123"
+                        },
+                        "payerDetails": {
+                          "firstName": "John",
+                          "lastName": "Doe",
+                          "email": "john.doe@example.com",
+                          "phone": "+1234567890"
+                        },
+                        "payeeDetails": {
+                          "businessName": "ABC Corporation",
+                          "email": "contact@abccorp.com",
+                          "phone": "+0987654321"
+                        },
+                        "transactionDate": "2024-03-12",
+                        "status": "completed",
+                        "shippingAddress": {
+                          "street": "123 Main St",
+                          "city": "Anytown",
+                          "state": "Anystate",
+                          "country": "Country",
+                          "postalCode": "12345"
+                        },
+                        "billingAddress": {
+                          "street": "123 Main St",
+                          "city": "Anytown",
+                          "state": "Anystate",
+                          "country": "Country",
+                          "postalCode": "12345"
+                        }
+                      }
+                      )
+                    })
+                  }} href={"/"}>Done</Link>
                 </Button>
               </CardContent>
             </Card>

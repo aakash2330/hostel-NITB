@@ -210,6 +210,9 @@ export default function Checkout({ roomDetails }: { roomDetails: RoomDetails }) 
           >
             <div className='flex justify-end items-end'>
               <Button onClick={() => {
+                if (!selectedGuests.length) {
+                  return alert("Please Select atleast 1 Guest")
+                }
                 [selectedGuests.forEach((guest) => {
                   createBookingMutation.mutate({
                     guestName: guest.name + Math.random(),
@@ -247,7 +250,7 @@ export default function Checkout({ roomDetails }: { roomDetails: RoomDetails }) 
 
 
 
-            <>
+            <div className='w-full'>
               {guests.map((g, index) => {
                 return <li key={g.id + index} className="flex py-6 sm:py-10">
                   <div className="flex-shrink-0">
@@ -287,14 +290,15 @@ export default function Checkout({ roomDetails }: { roomDetails: RoomDetails }) 
                         >
                           Add
                         </label>
-                      </div>
 
+                      </div>
                     </div>
 
                   </div>
+                  <div className='text-xs text-red-400 border border-red-400 p-1 hover:bg-red-400 hover:text-white hover:cursor-pointer font-bold'>x</div>
                 </li>
               })}
-            </>
+            </div>
 
           </section>
 

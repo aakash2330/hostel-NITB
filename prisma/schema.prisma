@@ -130,7 +130,7 @@ enum BookingStatus {
 enum GuestHouse {
   SARAN_GUEST_HOUSE
   VISHVESHVARAYA_GUEST_HOUSE
-  EXECUTIVE_GUEST_HOUESE
+  EXECUTIVE_GUEST_HOUSE
 }
 
 enum CleaningStatus {

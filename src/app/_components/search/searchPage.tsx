@@ -23,7 +23,6 @@ const SearchPage = () => {
   const xguests = { children: xchildren, adults: xAdults }
   const xlocation = searchParams.get('location') as GuestHouse
 
-
   const [location, setLocation] = useState<string>('');
   const [checkIn, setCheckIn] = useState<Date>();
   const [checkOut, setCheckOut] = useState<Date>();
@@ -52,6 +51,7 @@ const SearchPage = () => {
       setRoomDetails(roomDetails)
     }
   })
+  console.log({ roomDetails })
   useEffect(() => {
     roomDetailsMutation.mutate({ guestHouse: xlocation })
   }, [])

@@ -18,6 +18,7 @@ export default async function Page({
 }) {
   const paymentId = searchParams?.id
   if (paymentId) {
+
     const { booking } = await api.booking.getBookingByID.mutate({ id: paymentId as string })
 
     return (
@@ -119,7 +120,7 @@ export default async function Page({
                   </CardHeader>
                   <CardContent className="pl-2">
                     <pre className="mt-2 w-full rounded-md bg-slate-950 p-4 overflow-auto">
-                      <code className="text-white">{JSON.stringify(booking, null, 2)}</code>
+                      <code className="text-white text-xs md:text-sm">{JSON.stringify(booking, null, 2)}</code>
                     </pre>
                   </CardContent>
                 </Card>

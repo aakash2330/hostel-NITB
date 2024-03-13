@@ -101,7 +101,7 @@ async function main() {
       guestProfileId: guest1.id, // This should be a valid ID from the `guestProfiles` table
       bookingOrderNo: "BOOK123456789",
       bookingStatus: BookingStatus.VACANT, // Assuming CONFIRMED is an enum value for BookingStatus
-      hostelName: GuestHouse.EXECUTIVE_GUEST_HOUESE, // Assuming MAIN_GUEST_HOUSE is an enum value for GuestHouse
+      hostelName: GuestHouse.EXECUTIVE_GUEST_HOUSE, // Assuming MAIN_GUEST_HOUSE is an enum value for GuestHouse
       roomTarrif: RoomTariff.EXECTIVE_3500, // Assuming STANDARD is an enum value for RoomTariff
       nosRoom: "2",
       nosguest: "4",
@@ -135,7 +135,7 @@ async function main() {
       guestProfileId: guest2.id, // This should be a valid ID from the `guestProfiles` table
       bookingOrderNo: "BOOK123456789",
       bookingStatus: BookingStatus.VACANT, // Assuming CONFIRMED is an enum value for BookingStatus
-      hostelName: GuestHouse.EXECUTIVE_GUEST_HOUESE, // Assuming MAIN_GUEST_HOUSE is an enum value for GuestHouse
+      hostelName: GuestHouse.EXECUTIVE_GUEST_HOUSE, // Assuming MAIN_GUEST_HOUSE is an enum value for GuestHouse
       roomTarrif: RoomTariff.EXECTIVE_3500, // Assuming STANDARD is an enum value for RoomTariff
       nosRoom: "2",
       nosguest: "4",
@@ -194,7 +194,7 @@ async function main() {
       data: {
         code: "EX100" + i,
         roomImg: executeRoomPictures,
-        hostelName: GuestHouse.EXECUTIVE_GUEST_HOUESE,
+        hostelName: GuestHouse.EXECUTIVE_GUEST_HOUSE,
         value: "Deluxe Room",
         ghName: "Grand Hotel",
         roomType: RoomType.SINGLE_BED, // Assuming DELUXE is a valid enum value for RoomType
