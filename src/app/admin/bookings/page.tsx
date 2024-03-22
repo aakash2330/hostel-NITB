@@ -12,6 +12,24 @@ import { ScrollArea } from "~/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { api } from "~/trpc/server";
 
+function formatObject(obj: any, indentLevel = 1) {
+  let result = '';
+  const indent = '  '.repeat(indentLevel); // Creates an indentation string based on the current recursion depth
+  for (const [key, value] of Object.entries(obj)) {
+    if (typeof value === 'object' && value !== null) {
+      // If the value is an object, recursively format it
+      result += `${indent}${+key + 1}:\n${formatObject(value, indentLevel + 1)}`;
+    } else {
+      // Otherwise, just append the key-value pair
+      result += `${indent}${key}- ${value}\n`;
+    }
+  }
+
+  return result;
+}
+
+// Usage in a component
+
 export default async function Page({
   searchParams,
 }: {
@@ -19,9 +37,7 @@ export default async function Page({
 }) {
   const paymentId = searchParams?.id
   if (paymentId) {
-
     const { booking } = await api.booking.getBookingByID.mutate({ id: paymentId as string })
-
     return (
       <ScrollArea className="h-full">
         <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
@@ -121,7 +137,16 @@ export default async function Page({
                   </CardHeader>
                   <CardContent className="pl-2">
                     <pre className="mt-2 w-full rounded-md bg-slate-950 p-4 overflow-auto">
-                      <code className="text-white text-xs md:text-sm">{JSON.stringify(booking, null, 2)}</code>
+                      <code className="text-white text-xs md:text-sm">
+                        {Object.keys(booking ?? {}).map((key) => {
+                          const value = booking![key as keyof typeof booking];
+                          const formattedValue = typeof value === 'object' && value !== null
+                            ? `\n${formatObject(value)}`
+                            : value
+
+                          return <div key={key}>{`${key} - ${formattedValue}`}</div>;
+                        })}
+                      </code>
                     </pre>
                   </CardContent>
                 </Card>

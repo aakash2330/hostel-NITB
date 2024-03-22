@@ -42,7 +42,6 @@ enum Religion {
 
 enum TypeOrg {
   // Specify types of organizations
-
   CENTRAL_GOVT
   PRIVATE
   STATE_GOVT
@@ -190,6 +189,8 @@ model User {
   role          UserPermissionRole @default(USER)
   accounts      Account[]
   sessions      Session[]
+  guestProfiles GuestProfile[]
+  bookings      BookingDetails[]
 
   @@map("users")
 }
@@ -205,10 +206,9 @@ model VerificationToken {
 }
 
 model GuestProfile {
-  id                   String        @id @default(cuid()) @map("_id")
+  id                   String          @id @default(cuid()) @map("_id")
   name                 String
   email                String
-  userId               String
   alternativeEmail     String
   mobileNo             String
   alternativeMobileNo  String
@@ -236,50 +236,41 @@ model GuestProfile {
   dob                  DateTime
   maritalStatus        MaritalStatus
   remark               String
-  updateBy             String        @default("Candidate")
-  createdAt            DateTime      @default(now())
-  updatedAt            DateTime      @updatedAt
+  updateBy             String          @default("Candidate")
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
+  userId               String
+  user                 User            @relation(fields: [userId], references: [id])
+  BookingDetails       BookingDetails? @relation(fields: [bookingDetailsId], references: [id])
+  bookingDetailsId     String?
+  RoomDetails          RoomDetails?    @relation(fields: [roomDetailsId], references: [id])
+  roomDetailsId        String?
 
   @@map("guestProfiles")
 }
 
 model BookingDetails {
-  id                     String        @id @default(cuid()) @map("_id")
-  guestName              String
-  guestEmail             String
-  guestMobileNo          String
-  guestIdCardType        IDCardType
-  guestIdCardNo          String
-  guestIdCardUploaded    Answer
-  guestAddress           String
-  guestOfficeAdd         String
-  guestDesignation       String
-  guestType              TypeOrg
-  guestProfileId         String
-  bookingOrderNo         String
-  bookingStatus          BookingStatus
-  hostelName             GuestHouse
-  roomTarrif             RoomTariff
-  nosRoom                String
-  nosguest               String
-  updateBy               String        @default("Candidate")
-  createdAt              DateTime      @default(now())
-  updatedAt              DateTime      @updatedAt
-  bookingPersonName      String
-  bookingPersonMobileNo  String
-  bookingPersonEmail     String
-  bookingDate            DateTime
-  bookedFromDt           DateTime
-  bookedToDt             DateTime
-  remark                 String
-  bookingPersonProfileId String
-  bookPaymentId          String
+  id            String         @id @default(cuid()) @map("_id")
+  bookingStatus BookingStatus
+  hostelName    GuestHouse
+  updateBy      String         @default("Candidate")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  bookingDate   DateTime
+  bookedFromDt  DateTime
+  bookedToDt    DateTime
+  remark        String
+  bookPaymentId String
+  guests        GuestProfile[]
+  rooms         RoomDetails[]
+  userId        String
+  user          User           @relation(fields: [userId], references: [id])
 
   @@map("bookingDetails")
 }
 
 model RoomDetails {
-  id                String         @id @default(cuid()) @map("_id")
+  id                String          @id @default(cuid()) @map("_id")
   code              String
   value             String
   ghName            String
@@ -303,8 +294,22 @@ model RoomDetails {
   bookingStatus     BookingStatus
   cleaningStatus    CleaningStatus
   lastCleaningDate  DateTime
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  guests            GuestProfile[]
+  BookingDetails    BookingDetails? @relation(fields: [bookingDetailsId], references: [id])
+  bookingDetailsId  String?
 
   @@map("roomDetails")
+}
+
+model RoomCharges {
+  id           String     @id @default(cuid()) @map("_id")
+  hostelName   GuestHouse
+  CENTRAL_GOVT Int
+  PRIVATE      Int
+  STATE_GOVT   Int
+  OTHER        Int
+
+  @@map("masterPrice")
 }

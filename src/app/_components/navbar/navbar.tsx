@@ -122,9 +122,7 @@ const Navbar = () => {
                   </a>
                 ))}
               </div>
-              {user ? <div className='cursor-pointer' onClick={() => { signOut() }}>LOGOUT</div>
-                :
-                <div className='cursor-pointer' onClick={() => { signIn() }}>LOGIN/REGISTER</div>}
+              <AccountDropdown></AccountDropdown>
             </div>
           </div>
         </nav>

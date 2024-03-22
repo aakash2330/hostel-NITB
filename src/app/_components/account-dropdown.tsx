@@ -10,8 +10,8 @@ import {
 import { signOut, signIn } from 'next-auth/react';
 import Image from "next/image"
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 export default function AccountDropdown() {
-
   const { data: session } = useSession();
   const user = session ? session.user : null;
   return <DropdownMenu>
@@ -23,8 +23,7 @@ export default function AccountDropdown() {
     <DropdownMenuContent>
       <DropdownMenuLabel>{user ? user.name : "My Account"}</DropdownMenuLabel>
       <DropdownMenuSeparator />
-      <DropdownMenuItem>Profile</DropdownMenuItem>
-      <DropdownMenuItem>My Bookings</DropdownMenuItem>
+      <DropdownMenuItem><Link href='/myBookings'>My Bookings</Link></DropdownMenuItem>
       {user ?
         <DropdownMenuItem onClick={() => { signOut() }}>Logout</DropdownMenuItem>
         : <DropdownMenuItem onClick={() => { signIn() }}>Login</DropdownMenuItem>}

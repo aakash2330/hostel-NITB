@@ -20,11 +20,13 @@ import { CreateGuestValidator, TCreateGuestValidator } from '~/utils/validators/
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import AdminGuestForm from '~/app/_components/guests/guestFormAdmin';
+import { Input } from '~/components/ui/input';
 
 
 export default function Page() {
   const [guests, setGuests] = useState<GuestProfile[]>([])
   const [selectedGuests, setSelectedGuests] = useState<GuestProfile[]>([])
+  const [selectedNumberOfRooms, setSelectedNumberOfRooms] = useState(1)
   const { toast } = useToast()
   const { data: session } = useSession();
 
@@ -52,7 +54,7 @@ export default function Page() {
   useEffect(() => { getGuestsMutation.mutate({ userId: session?.user.id ?? "" }) }, [])
   return (
     <>
-      <main className="lg:flex lg:min-h-full lg:flex-row-reverse lg:overflow-hidden">
+      <main className="lg:flex lg:min-h-full justify-center items-center   lg:overflow-hidden">
         <div className="px-4 py-6 sm:px-6 lg:hidden">
           <div className="mx-auto flex max-w-lg">
             <a href="#">
@@ -61,49 +63,33 @@ export default function Page() {
           </div>
         </div>
         <Dialog>
-          <DialogContent className="no-scrollbar  p-10 flex justify-center items-center flex-wrap text-gray-600 " style={{ width: "50%", height: "90%", overflow: "auto" }}>
+          <DialogContent className="no-scrollbar p-10 flex justify-center items-center flex-wrap text-gray-600 " style={{ width: "50%", height: "90%", overflow: "auto" }}>
             <AdminGuestForm></AdminGuestForm>
           </DialogContent>
-          <section
-            aria-labelledby="payment-heading"
-            className="flex-auto overflow-y-auto px-4  pb-16 pt-12 sm:px-6 sm:pt-16 lg:px-8 lg:pb-24 lg:pt-0"
+          <div
+            className="flex-col p-4 min-w-[40rem]"
           >
-            <div className='flex justify-end items-end'>
+            <div className='flex justify-center items-center gap-10 mt-2'>
               <Button onClick={() => {
                 if (!selectedGuests.length) {
                   return alert("Please Select atleast 1 Guest")
                 }
-                [selectedGuests.forEach((guest) => {
-                  createBookingMutation.mutate({
-                    guestName: guest.name + Math.random(),
-                    guestEmail: guest.email,
-                    guestMobileNo: guest.mobileNo,
-                    guestIdCardType: guest.identity_card_type, // Assuming DRIVING_LICENSE is an enum value for IDCardType
-                    guestIdCardNo: guest.id_card_no,
-                    guestIdCardUploaded: "YES", // Assuming YES is an enum value for Answer
-                    guestAddress: guest.permanentAddress,
-                    guestOfficeAdd: guest.orgAddress,
-                    guestDesignation: guest.designation,
-                    guestType: TypeOrg.PRIVATE, // Assuming CORPORATE is an enum value for TypeOrg
-                    bookingOrderNo: "BOOK123456789",
-                    bookingStatus: BookingStatus.VACANT, // Assuming CONFIRMED is an enum value for BookingStatus
-                    hostelName: GuestHouse.SARAN_GUEST_HOUSE, // Assuming MAIN_GUEST_HOUSE is an enum value for GuestHouse
-                    roomTarrif: RoomTariff.EXECTIVE_3500, // Assuming STANDARD is an enum value for RoomTariff
-                    nosRoom: "2",
-                    nosguest: "4",
-                    updateBy: "Candidate",
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    bookingDate: new Date().toISOString(),
-                    bookedFromDt: new Date(),
-                    bookedToDt: new Date(),
-                    remark: "Looking forward to the stay.",
-                    bookPaymentId: "cuid789payment" + Math.random() // This should be a valid ID from the `bookingPayments` table
-                  })
-                })]
+                createBookingMutation.mutate({
+                  hostelName: GuestHouse.SARAN_GUEST_HOUSE,
+                  guestIds: selectedGuests.map(g => g.id),
+                  bookingDate: new Date().toISOString(),
+                  bookedFromDt: new Date(),
+                  bookedToDt: new Date(),
+                  nosRooms: selectedNumberOfRooms,
+                  remark: "",
+                })
               }}>Confirm Booking</Button>
+
+              <Input onChange={(e) => { setSelectedNumberOfRooms(Number(e.target.value)) }} type="number" placeholder="rooms" className='w-24' />
             </div>
-            {!!guests.length && <DialogTrigger className='text-center w-full text-sm font-bold'>+ Add New Guest</DialogTrigger>}
+            <div>
+              {!!guests.length && <DialogTrigger className='text-center w-full mt-6 text-sm font-bold'>+ Add New Guest</DialogTrigger>}
+            </div>
             <div className='w-full'>
               {!!!guests.length && <AdminGuestForm></AdminGuestForm>}
             </div>
@@ -160,8 +146,7 @@ export default function Page() {
               })}
             </div>
 
-          </section>
-
+          </div>
         </Dialog>
         {/* Checkout form */}
       </main>

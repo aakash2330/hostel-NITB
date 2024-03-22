@@ -7,9 +7,9 @@ export default async function Page({
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
 
-  const { roomDetails } = await api.room.getRoomById.mutate({ hostelId: searchParams?.id as string })
-  if (roomDetails) {
-    return <Checkout roomDetails={roomDetails}>
+  const { roomDetails, roomCharges } = await api.room.getRoomById.mutate({ hostelId: searchParams?.id as string })
+  if (roomDetails && roomCharges) {
+    return <Checkout roomCharges={roomCharges} roomDetails={roomDetails}>
     </Checkout>
   }
   else {

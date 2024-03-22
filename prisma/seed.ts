@@ -12,6 +12,15 @@ async function main() {
     },
   });
 
+  const user2 = await prisma.user.create({
+    data: {
+      name: "user2" + Math.random(),
+      email: "user2@user2" + Math.random(),
+      role: UserPermissionRole.ADMIN,
+      password: "password"
+    },
+  });
+
   const guest1 = await prisma.guestProfile.create({
     data: {
       name: "John Doe" + Math.random(),
@@ -44,7 +53,6 @@ async function main() {
       maritalStatus: MaritalStatus.MARRIED, // Assuming SINGLE is an enum value for MaritalStatus
       remark: "No remarks.",
       userId: user1.id
-
     }
   })
 
@@ -80,7 +88,7 @@ async function main() {
       dob: new Date("1990-01-01T00:00:00Z"),
       maritalStatus: MaritalStatus.MARRIED, // Assuming SINGLE is an enum value for MaritalStatus
       remark: "No remarks.",
-      userId: user1.id
+      userId: user2.id
 
     }
   })
@@ -88,71 +96,37 @@ async function main() {
 
   const bookingDetail1 = await prisma.bookingDetails.create({
     data: {
-      guestName: guest1.name + Math.random(),
-      guestEmail: guest1.email,
-      guestMobileNo: guest1.mobileNo,
-      guestIdCardType: guest1.identity_card_type, // Assuming DRIVING_LICENSE is an enum value for IDCardType
-      guestIdCardNo: guest1.id_card_no,
-      guestIdCardUploaded: "YES", // Assuming YES is an enum value for Answer
-      guestAddress: guest1.permanentAddress,
-      guestOfficeAdd: guest1.orgAddress,
-      guestDesignation: guest1.designation,
-      guestType: TypeOrg.PRIVATE, // Assuming CORPORATE is an enum value for TypeOrg
-      guestProfileId: guest1.id, // This should be a valid ID from the `guestProfiles` table
-      bookingOrderNo: "BOOK123456789",
-      bookingStatus: BookingStatus.VACANT, // Assuming CONFIRMED is an enum value for BookingStatus
-      hostelName: GuestHouse.EXECUTIVE_GUEST_HOUSE, // Assuming MAIN_GUEST_HOUSE is an enum value for GuestHouse
-      roomTarrif: RoomTariff.EXECTIVE_3500, // Assuming STANDARD is an enum value for RoomTariff
-      nosRoom: "2",
-      nosguest: "4",
+      userId: user1.id,
+      bookingStatus: BookingStatus.VACANT,
+      hostelName: GuestHouse.EXECUTIVE_GUEST_HOUSE,
       updateBy: "Candidate",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      bookingPersonName: "Chris Johnson",
-      bookingPersonMobileNo: "1234567890",
-      bookingPersonEmail: "chris.johnson@example.com",
       bookingDate: new Date().toISOString(),
       bookedFromDt: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString(),
       bookedToDt: new Date(new Date().setDate(new Date().getDate() + 10)).toISOString(),
       remark: "Looking forward to the stay.",
-      bookingPersonProfileId: "clsxpbrel0000usrl2nl70tfe", // This should be a valid ID from the `guestProfiles` table
+      bookPaymentId: "cuid789payment"
+    }
+  })
+
+
+  const bookingDetail2 = await prisma.bookingDetails.create({
+    data: {
+      userId: user2.id,
+      bookingStatus: BookingStatus.VACANT,
+      hostelName: GuestHouse.EXECUTIVE_GUEST_HOUSE,
+      updateBy: "Candidate",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      bookingDate: new Date().toISOString(),
+      bookedFromDt: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString(),
+      bookedToDt: new Date(new Date().setDate(new Date().getDate() + 10)).toISOString(),
+      remark: "Looking forward to the stay.",
       bookPaymentId: "cuid789payment" // This should be a valid ID from the `bookingPayments` table
     }
   })
 
-  const bookingDetail2 = await prisma.bookingDetails.create({
-    data: {
-      guestName: guest2.name,
-      guestEmail: guest2.email,
-      guestMobileNo: guest2.mobileNo,
-      guestIdCardType: guest2.identity_card_type, // Assuming DRIVING_LICENSE is an enum value for IDCardType
-      guestIdCardNo: guest2.id_card_no,
-      guestIdCardUploaded: "YES", // Assuming YES is an enum value for Answer
-      guestAddress: guest2.permanentAddress,
-      guestOfficeAdd: guest2.orgAddress,
-      guestDesignation: guest2.designation,
-      guestType: TypeOrg.PRIVATE, // Assuming CORPORATE is an enum value for TypeOrg
-      guestProfileId: guest2.id, // This should be a valid ID from the `guestProfiles` table
-      bookingOrderNo: "BOOK123456789",
-      bookingStatus: BookingStatus.VACANT, // Assuming CONFIRMED is an enum value for BookingStatus
-      hostelName: GuestHouse.EXECUTIVE_GUEST_HOUSE, // Assuming MAIN_GUEST_HOUSE is an enum value for GuestHouse
-      roomTarrif: RoomTariff.EXECTIVE_3500, // Assuming STANDARD is an enum value for RoomTariff
-      nosRoom: "2",
-      nosguest: "4",
-      updateBy: "Candidate",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      bookingPersonName: "Chris Johnson",
-      bookingPersonMobileNo: "1234567890",
-      bookingPersonEmail: "chris.johnson@example.com",
-      bookingDate: new Date().toISOString(),
-      bookedFromDt: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString(),
-      bookedToDt: new Date(new Date().setDate(new Date().getDate() + 10)).toISOString(),
-      remark: "Looking forward to the stay.",
-      bookingPersonProfileId: "clsxpbrel0000usrl2nl70tfe", // This should be a valid ID from the `guestProfiles` table
-      bookPaymentId: "cuid789payment" // This should be a valid ID from the `bookingPayments` table
-    }
-  })
 
   const saranRoomPictures = ["https://aakash2330-drippy.s3.amazonaws.com/NITTTR/saran/fwdsaranguesthouselatestphotograph/_DSC0346+(2).JPG", "https://aakash2330-drippy.s3.amazonaws.com/NITTTR/saran/fwdsaranguesthouselatestphotograph/DSC_0127.JPG", "https://aakash2330-drippy.s3.amazonaws.com/NITTTR/saran/fwdsaranguesthouselatestphotograph/DSC_0136.JPG", "https://aakash2330-drippy.s3.amazonaws.com/NITTTR/saran/fwdsaranguesthouselatestphotograph/DSC_0137.JPG", "https://aakash2330-drippy.s3.amazonaws.com/NITTTR/saran/fwdsaranguesthouselatestphotograph/DSC_0140.JPG"]
   for (let i = 0; i < saranRoomPictures.length; i++) {
@@ -163,12 +137,12 @@ async function main() {
         hostelName: GuestHouse.SARAN_GUEST_HOUSE,
         value: "Deluxe Room",
         ghName: "Grand Hotel",
-        roomType: RoomType.FOUR_BED, // Assuming DELUXE is a valid enum value for RoomType
-        occupancy: Occupancy.DOUBLE, // Assuming DOUBLE is a valid enum value for Occupancy
-        floor: Floor.FIRST_FLOOR, // Assuming FIRST_FLOOR is a valid enum value for Floor
-        ac: Answer.YES, // Assuming YES is a valid enum value for Answer
-        geaser: Answer.YES, // Assuming YES is a valid enum value for Answer
-        airCooled: Answer.NO, // Assuming NO is a valid enum value for Answer
+        roomType: RoomType.FOUR_BED,
+        occupancy: Occupancy.DOUBLE,
+        floor: Floor.FIRST_FLOOR,
+        ac: Answer.YES,
+        geaser: Answer.YES,
+        airCooled: Answer.NO,
         maxAdult: "2",
         maxChild: "2",
         remark: "Experience comfort and convenience in our single rooms at NITTTR Bhopal. Perfect for solo travelers or individuals seeking privacy. Explore our affordable accommodation options today!",
@@ -182,7 +156,8 @@ async function main() {
         cleaningStatus: CleaningStatus.READY, // Assuming CLEAN is a valid enum value for CleaningStatus
         lastCleaningDate: new Date().toISOString(),
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
+        bookingDetailsId: bookingDetail1.id
       }
 
     })
@@ -216,14 +191,15 @@ async function main() {
         cleaningStatus: CleaningStatus.READY, // Assuming CLEAN is a valid enum value for CleaningStatus
         lastCleaningDate: new Date().toISOString(),
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
+        bookingDetailsId: bookingDetail2.id
       }
 
     })
   }
 
 
-  const viswesawraiyaguesthousePictures = ["https://aakash2330-drippy.s3.amazonaws.com/NITTTR/fwdviswesawraiyaguesthouse/_DSC0140.JPG", "https://aakash2330-drippy.s3.amazonaws.com/NITTTR/fwdviswesawraiyaguesthouse/DSC_0067.JPG", "https://aakash2330-drippy.s3.amazonaws.com/NITTTR/fwdviswesawraiyaguesthouse/DSC_0111.JPG", "https://aakash2330-drippy.s3.amazonaws.com/NITTTR/fwdviswesawraiyaguesthouse/DSC_1422.JPG"]
+  const viswesawraiyaguesthousePictures = ["https://aakash2330-drippy.s3.amazonaws.com/NITTTR/fwdviswesawraiyaguesthouse/DSC_0067.JPG", "https://aakash2330-drippy.s3.amazonaws.com/NITTTR/fwdviswesawraiyaguesthouse/DSC_0067.JPG", "https://aakash2330-drippy.s3.amazonaws.com/NITTTR/fwdviswesawraiyaguesthouse/DSC_0111.JPG", "https://aakash2330-drippy.s3.amazonaws.com/NITTTR/fwdviswesawraiyaguesthouse/DSC_1422.JPG"]
   for (let i = 0; i < viswesawraiyaguesthousePictures.length; i++) {
     const roomDetails = await prisma.roomDetails.create({
       data: {
@@ -256,6 +232,31 @@ async function main() {
 
     })
   }
+
+  const masterPrices = await prisma.roomCharges.createMany({
+    data: [{
+      hostelName: "SARAN_GUEST_HOUSE",
+      STATE_GOVT: 800,
+      OTHER: 600,
+      PRIVATE: 3000,
+      CENTRAL_GOVT: 500,
+
+    }, {
+      hostelName: "EXECUTIVE_GUEST_HOUSE",
+      STATE_GOVT: 1000,
+      OTHER: 1000,
+      PRIVATE: 1000,
+      CENTRAL_GOVT: 1000,
+
+    }, {
+      hostelName: "VISHVESHVARAYA_GUEST_HOUSE",
+      STATE_GOVT: 300,
+      OTHER: 400,
+      PRIVATE: 2000,
+      CENTRAL_GOVT: 700,
+
+    }]
+  })
 
 }
 

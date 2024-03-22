@@ -34,7 +34,8 @@ export const roomRouter = createTRPCRouter({
           id: hostelId
         }
       })
-      return { roomDetails }
+      const roomCharges = await ctx.db.roomCharges.findFirst({ where: { hostelName: roomDetails?.hostelName } })
+      return { roomDetails, roomCharges }
     }),
 
   getRoomsByGuestHouse: publicProcedure

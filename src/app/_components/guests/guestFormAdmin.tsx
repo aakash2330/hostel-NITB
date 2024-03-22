@@ -147,7 +147,7 @@ export default function AdminGuestForm() {
         name="typeOrg"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>typeOrg</FormLabel>
+            <FormLabel>Type Org</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger>

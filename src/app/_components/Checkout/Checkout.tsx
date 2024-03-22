@@ -3,7 +3,7 @@
 'use client';
 import { Disclosure } from '@headlessui/react';
 import { UserIcon } from "lucide-react"
-import { BookingStatus, GuestHouse, GuestProfile, RoomDetails } from '@prisma/client';
+import { BookingStatus, GuestHouse, GuestProfile, RoomCharges, RoomDetails } from '@prisma/client';
 import { TypeOrg } from "@prisma/client";
 import { useSession } from 'next-auth/react';
 import { z } from 'zod';
@@ -20,11 +20,14 @@ import { CreateGuestValidator, TCreateGuestValidator } from '~/utils/validators/
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import GuestForm from '../guests/guestForm';
+import { Input } from '~/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
 
 
-export default function Checkout({ roomDetails }: { roomDetails: RoomDetails }) {
+export default function Checkout({ roomDetails, roomCharges }: { roomDetails: RoomDetails, roomCharges: RoomCharges }) {
   const [guests, setGuests] = useState<GuestProfile[]>([])
   const [selectedGuests, setSelectedGuests] = useState<GuestProfile[]>([])
+  const [selectedNumberOfRooms, setSelectedNumberOfRooms] = useState(1)
   const { toast } = useToast()
   const { data: session } = useSession();
 
@@ -101,12 +104,21 @@ export default function Checkout({ roomDetails }: { roomDetails: RoomDetails }) 
                         />
                         <div className="flex flex-col justify-between space-y-4">
                           <div className="space-y-1 text-sm font-medium">
+                            <h3 className="text-gray-900">{room.value}</h3>
                             <h3 className="text-gray-900">{room.code}</h3>
                             <p className="text-gray-900">{room.value}</p>
                           </div>
                           <div className="flex space-x-4">
-                            <div className="flex border-l border-gray-300 pl-4">
-                            </div>
+                            <Select defaultValue='1' onValueChange={(value) => { setSelectedNumberOfRooms(+value) }}>
+                              <SelectTrigger >
+                                <SelectValue placeholder="No. Rooms" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {new Array(selectedGuests.length).fill(null).map((_n, i) => {
+                                  return <SelectItem value={(i + 1).toString()} key={i}>{i + 1}</SelectItem>
+                                })}
+                              </SelectContent>
+                            </Select>
                           </div>
                         </div>
                       </li>
@@ -116,20 +128,11 @@ export default function Checkout({ roomDetails }: { roomDetails: RoomDetails }) 
                   <dl className="mt-10 space-y-6 text-sm font-medium text-gray-500">
                     <div className="flex justify-between">
                       <dt>Subtotal</dt>
-                      <dd className="text-gray-900">₹{roomDetails.totalChargePerDay}</dd>
-                    </div>
-                    <div className="flex justify-between">
-                      <dt className="flex">
-                        Discount
-                        <span className="ml-2 rounded-full bg-gray-200 px-2 py-0.5 text-xs tracking-wide text-gray-600">
-                          {"DISCOUNT CODE"}
-                        </span>
-                      </dt>
-                      <dd className="text-gray-900">₹{0}</dd>
+                      <dd className="text-gray-900">₹{selectedGuests.reduce((a, c) => { return a + roomCharges[c.typeOrg] }, 0)}</dd>
                     </div>
                     <div className="flex justify-between">
                       <dt>Taxes</dt>
-                      <dd className="text-gray-900">₹{180}</dd>
+                      <dd className="text-gray-900">₹{selectedGuests.reduce((a, c) => { return a + roomCharges[c.typeOrg] }, 0)}</dd>
                     </div>
                   </dl>
                 </Disclosure.Panel>
@@ -159,14 +162,24 @@ export default function Checkout({ roomDetails }: { roomDetails: RoomDetails }) 
                   alt={"https://plus.unsplash.com/premium_photo-1663126298656-33616be83c32?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"}
                   className="h-24 w-24 flex-none rounded-md bg-gray-200 object-cover object-center"
                 />
-                <div className="flex flex-col justify-between space-y-4">
+                <div className="flex gap-6 justify-between">
                   <div className="space-y-1 text-sm font-medium">
                     <h3 className="text-gray-900">{room.value}</h3>
                     <h3 className="text-gray-900">{room.code}</h3>
                     <p className="text-gray-900">₹{room.totalChargePerDay}</p>
                   </div>
-                  <div className="flex space-x-4">
-                    <div className="flex border-l border-gray-300 pl-4">
+                  <div className="flex">
+                    <div className="">
+                      <Select defaultValue={'1'} onValueChange={(value) => { setSelectedNumberOfRooms(+value) }}>
+                        <SelectTrigger >
+                          <SelectValue placeholder="No. Rooms" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {new Array(selectedGuests.length).fill(null).map((_n, i) => {
+                            return <SelectItem value={(i + 1).toString()} key={i}>{i + 1}</SelectItem>
+                          })}
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
                 </div>
@@ -178,24 +191,24 @@ export default function Checkout({ roomDetails }: { roomDetails: RoomDetails }) 
             <dl className="mt-10 space-y-6 text-sm font-medium text-gray-500">
               <div className="flex justify-between">
                 <dt>Subtotal</dt>
-                <dd className="text-gray-900">₹{roomDetails.totalChargePerDay}</dd>
+                <dd className="text-gray-900">₹{selectedGuests.map((g, i) => { return i != selectedGuests.length - 1 ? `${roomCharges[g.typeOrg]}+` : `${roomCharges[g.typeOrg]}` })}</dd>
               </div>
-              <div className="flex justify-between">
+              {/*<div className="flex justify-between">
                 <dt className="flex">
                   Discount
-                  <span className="ml-2 rounded-full bg-gray-200 px-2 py-0.5 text-xs tracking-wide text-gray-600">
+                   <span className="ml-2 rounded-full bg-gray-200 px-2 py-0.5 text-xs tracking-wide text-gray-600">
                     {"DISCOUNT CODE"}
                   </span>
                 </dt>
                 <dd className="text-gray-900">₹{0}</dd>
-              </div>
+              </div>*/}
               <div className="flex justify-between">
                 <dt>Taxes</dt>
-                <dd className="text-gray-900">₹{180}</dd>
+                <dd className="text-gray-900">₹{selectedGuests.reduce((a, c) => { return a + 180 }, 0)}</dd>
               </div>
               <div className="flex items-center justify-between border-t border-gray-200 pt-6 text-gray-900">
                 <dt className="text-base">Total</dt>
-                <dd className="text-gray-900">₹{roomDetails.totalChargePerDay}</dd>
+                <dd className="text-gray-900">₹{selectedGuests.reduce((a, c) => { return a + roomCharges[c.typeOrg] }, 0)}</dd>
               </div>
             </dl>
           </div>
@@ -213,34 +226,18 @@ export default function Checkout({ roomDetails }: { roomDetails: RoomDetails }) 
                 if (!selectedGuests.length) {
                   return alert("Please Select atleast 1 Guest")
                 }
-                [selectedGuests.forEach((guest) => {
-                  createBookingMutation.mutate({
-                    guestName: guest.name + Math.random(),
-                    guestEmail: guest.email,
-                    guestMobileNo: guest.mobileNo,
-                    guestIdCardType: guest.identity_card_type, // Assuming DRIVING_LICENSE is an enum value for IDCardType
-                    guestIdCardNo: guest.id_card_no,
-                    guestIdCardUploaded: "YES", // Assuming YES is an enum value for Answer
-                    guestAddress: guest.permanentAddress,
-                    guestOfficeAdd: guest.orgAddress,
-                    guestDesignation: guest.designation,
-                    guestType: TypeOrg.PRIVATE, // Assuming CORPORATE is an enum value for TypeOrg
-                    bookingOrderNo: "BOOK123456789",
-                    bookingStatus: BookingStatus.VACANT, // Assuming CONFIRMED is an enum value for BookingStatus
-                    hostelName: GuestHouse.SARAN_GUEST_HOUSE, // Assuming MAIN_GUEST_HOUSE is an enum value for GuestHouse
-                    roomTarrif: roomDetails.roomTarrif, // Assuming STANDARD is an enum value for RoomTariff
-                    nosRoom: "2",
-                    nosguest: "4",
-                    updateBy: "Candidate",
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    bookingDate: new Date().toISOString(),
-                    bookedFromDt: new Date(),
-                    bookedToDt: new Date(),
-                    remark: "Looking forward to the stay.",
-                    bookPaymentId: "cuid789payment" + Math.random() // This should be a valid ID from the `bookingPayments` table
-                  })
-                })]
+                if (!selectedNumberOfRooms) {
+                  return alert("Please Select Number of Rooms")
+                }
+                createBookingMutation.mutate({
+                  hostelName: GuestHouse.SARAN_GUEST_HOUSE,
+                  guestIds: selectedGuests.map(g => g.id),
+                  bookingDate: new Date().toISOString(),
+                  bookedFromDt: new Date(),
+                  bookedToDt: new Date(),
+                  nosRooms: selectedNumberOfRooms,
+                  remark: "",
+                })
               }}>Confirm Booking</Button>
             </div>
             {!!guests.length && <DialogTrigger className='text-center w-full text-sm font-bold'>+ Add New Guest</DialogTrigger>}
@@ -256,7 +253,7 @@ export default function Checkout({ roomDetails }: { roomDetails: RoomDetails }) 
                   <div className="flex-shrink-0">
                     <UserIcon></UserIcon>
                   </div>
-                  <div className="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
+                  <div className="ml-4 flex flex-1  flex-col justify-between sm:ml-6">
                     <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
                       <div>
                         <div className="flex justify-between">
@@ -273,11 +270,9 @@ export default function Checkout({ roomDetails }: { roomDetails: RoomDetails }) 
                             setSelectedGuests((f) => {
                               if (checked) {
                                 const updatedGuestList = [...f, g]
-                                console.log({ updatedGuestList })
                                 return updatedGuestList
                               } else {
                                 const updatedGuestList = f.filter((item) => item.id !== g.id)
-                                console.log({ updatedGuestList })
                                 return updatedGuestList
                               }
                             });
@@ -309,21 +304,3 @@ export default function Checkout({ roomDetails }: { roomDetails: RoomDetails }) 
   );
 }
 
-//<Checkbox
-//  onCheckedChange={(checked: boolean) => {
-//    setSelectedGuests((f) => {
-//      if (checked) {
-//        const updatedGuestList = [...f, g.id]
-//        console.log(updatedGuestList);
-//        console.log({ updatedGuestList })
-//      } else {
-//        const updatedGuestList = f.filter((item) => item !== g.id)
-//        console.log({ updatedGuestList })
-//        return updatedGuestList
-//      }
-//    });
-//  }}
-//  className="rounded-full border-none"
-///>
-//
-//                <Button onClick={() => { onSubmit(form.getValues()) }} type="submit">Submit</Button>

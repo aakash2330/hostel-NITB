@@ -148,6 +148,35 @@ export default function GuestForm() {
 
       <FormField
         control={form.control}
+        name="typeOrg"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Type Org</FormLabel>
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a typeOrg" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {Object.keys(TypeOrg).map((t, index) => {
+                  return <SelectItem key={t + index} value={t}>{t}</SelectItem>
+
+                })}
+              </SelectContent>
+            </Select>
+            <FormDescription>
+              You can manage email addresses in your{" "}
+              <Link href="/examples/forms">email settings</Link>.
+            </FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+
+      <FormField
+        control={form.control}
         name="mobileNo"
         render={({ field }) => (
           <FormItem>
