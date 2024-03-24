@@ -1,5 +1,5 @@
 
-import { BookingStatus } from "@prisma/client";
+import { BookingStatus, GuestHouse } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -50,16 +50,46 @@ export const bookingRouter = createTRPCRouter({
     }),
 
   getAllBookings: protectedProcedure
-    .input(z.object({ userId: z.string().optional() }))
+    .input(z.object({ hostelName: z.custom<GuestHouse>().optional() }))
     .mutation(async ({ ctx, input }) => {
-      if (input.userId == '') {
-        const bookings = await ctx.db.bookingDetails.findMany({ where: { userId: ctx.session.user.id } })
-        console.log({ bookings })
+      console.log(ctx.session.user.role)
+      if (ctx.session.user.role != 'ADMIN') {
+        const bookings = await ctx.db.bookingDetails.findMany({
+          where: { userId: ctx.session.user.id },
+          include: {
+            guests: {
+            },
+            rooms: {
+            }
+          }
+        })
         return { bookings }
       }
       else {
-        const bookings = await ctx.db.bookingDetails.findMany({})
-        return { bookings }
+        if (input.hostelName) {
+          const bookings = await ctx.db.bookingDetails.findMany({
+            where: { hostelName: input.hostelName },
+            include: {
+              guests: {
+              },
+              rooms: {
+              }
+            }
+          })
+          return { bookings }
+        }
+        else {
+          const bookings = await ctx.db.bookingDetails.findMany({
+            include: {
+              guests: {
+              },
+              rooms: {
+              }
+            }
+          })
+          return { bookings }
+
+        }
       }
     }),
   getBookingByID: protectedProcedure
@@ -71,11 +101,9 @@ export const bookingRouter = createTRPCRouter({
           id
         },
         include: {
-          guests: true,
+          guests: {
+          },
           rooms: {
-            select: {
-              code: true
-            }
           }
         }
       })

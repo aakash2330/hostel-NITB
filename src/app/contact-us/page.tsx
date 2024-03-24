@@ -41,7 +41,6 @@ const formSchema = z.object({
 
 export default function Page() {
   // const [agreed, setAgreed] = useState(false);
-
   return (
     <div className="  px-6 py-24 sm:py-32 lg:px-8">
       {/*

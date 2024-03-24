@@ -29,6 +29,8 @@ import {
 } from "~/components/ui/select"
 import { GuestHouse } from "@prisma/client";
 import { api } from "~/trpc/react";
+import bannerImg from "public/banner.jpg"
+import Image from "next/image";
 
 
 export const formSchema = z.object({
@@ -107,15 +109,16 @@ function SearchForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col lg:flex-row lg:max-w-6xl lg:mx-auto text-black items-center justify-center space-x-0 lg:space-x-2 space-y-4 lg:space-y-0 rounded-lg"
+        className="flex relative flex-col lg:flex-row lg:max-w-6xl lg:mx-auto text-black items-center justify-center space-x-0 lg:space-x-2 space-y-4 lg:space-y-0 rounded-lg p-10 "
       >
+        <Image src={bannerImg} className="z-[-1]" alt="hero" fill objectFit="cover" />
         <div className="grid w-full lg:max-w-sm items-center gap-1.5">
           <FormField
             control={form.control}
             name="location"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-black flex">
+                <FormLabel className="font-extrabold flex">
                   Location
                   <BedDoubleIcon className="ml-2 h-4 w-4 text-black" />
                 </FormLabel>
@@ -127,7 +130,7 @@ function SearchForm() {
                   </FormControl>
                   <SelectContent>
                     {Object.keys(GuestHouse).map((g, index) => {
-                      return <SelectItem key={g + index} value={g}>{g}</SelectItem>
+                      return <SelectItem key={g + index} value={g}>{g.split("_").join(" ")}</SelectItem>
                     })}
                   </SelectContent>
                 </Select>
@@ -143,7 +146,7 @@ function SearchForm() {
             name="dates"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel className="">Dates</FormLabel>
+                <FormLabel className="font-extrabold">Dates</FormLabel>
                 <FormMessage />
 
                 <Popover>
@@ -194,13 +197,13 @@ function SearchForm() {
         </div>
 
         <div className="flex w-full items-center space-x-2">
-          <div className="grid items-center flex-1">
+          <div className="grid  tems-center flex-1">
             <FormField
               control={form.control}
               name="adults"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel className="">Adults</FormLabel>
+                  <FormLabel className="font-extrabold">Adults</FormLabel>
                   <FormMessage />
                   <FormControl>
                     <Input type="number" placeholder="Adults" {...field} />
@@ -216,7 +219,7 @@ function SearchForm() {
               name="children"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel className="">Children</FormLabel>
+                  <FormLabel className="font-extrabold">Children</FormLabel>
                   <FormMessage />
                   <FormControl>
                     <Input type="number" placeholder="Children" {...field} />
@@ -232,7 +235,7 @@ function SearchForm() {
               name="rooms"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel className="">Rooms</FormLabel>
+                  <FormLabel className="font-extrabold">Rooms</FormLabel>
                   <FormMessage />
                   <FormControl>
                     <Input type="number" placeholder="rooms" {...field} />

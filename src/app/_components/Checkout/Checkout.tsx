@@ -106,7 +106,6 @@ export default function Checkout({ roomDetails, roomCharges }: { roomDetails: Ro
                           <div className="space-y-1 text-sm font-medium">
                             <h3 className="text-gray-900">{room.value}</h3>
                             <h3 className="text-gray-900">{room.code}</h3>
-                            <p className="text-gray-900">{room.value}</p>
                           </div>
                           <div className="flex space-x-4">
                             <Select defaultValue='1' onValueChange={(value) => { setSelectedNumberOfRooms(+value) }}>
@@ -166,7 +165,6 @@ export default function Checkout({ roomDetails, roomCharges }: { roomDetails: Ro
                   <div className="space-y-1 text-sm font-medium">
                     <h3 className="text-gray-900">{room.value}</h3>
                     <h3 className="text-gray-900">{room.code}</h3>
-                    <p className="text-gray-900">₹{room.totalChargePerDay}</p>
                   </div>
                   <div className="flex">
                     <div className="">
@@ -230,7 +228,7 @@ export default function Checkout({ roomDetails, roomCharges }: { roomDetails: Ro
                   return alert("Please Select Number of Rooms")
                 }
                 createBookingMutation.mutate({
-                  hostelName: GuestHouse.SARAN_GUEST_HOUSE,
+                  hostelName: roomDetails.hostelName,
                   guestIds: selectedGuests.map(g => g.id),
                   bookingDate: new Date().toISOString(),
                   bookedFromDt: new Date(),
@@ -240,7 +238,6 @@ export default function Checkout({ roomDetails, roomCharges }: { roomDetails: Ro
                 })
               }}>Confirm Booking</Button>
             </div>
-            {!!guests.length && <DialogTrigger className='text-center w-full text-sm font-bold'>+ Add New Guest</DialogTrigger>}
             <div className='w-full'>
               {!!!guests.length && <GuestForm></GuestForm>}
             </div>
@@ -290,10 +287,12 @@ export default function Checkout({ roomDetails, roomCharges }: { roomDetails: Ro
                     </div>
 
                   </div>
-                  <div className='text-xs text-red-400 border border-red-400 p-1 hover:bg-red-400 hover:text-white hover:cursor-pointer font-bold'>x</div>
+                  <div onClick={() => { }} className='text-xs text-red-400 border border-red-400 p-1 hover:bg-red-400 hover:text-white hover:cursor-pointer font-bold'>x</div>
                 </li>
               })}
             </div>
+
+            {!!guests.length && <DialogTrigger className='text-center hover:underline w-full text-sm font-bold'>+ Add New Guest</DialogTrigger>}
 
           </section>
 

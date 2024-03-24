@@ -1,4 +1,4 @@
-import { Answer, BookingStatus, Category, Country, Gender, GuestHouse, IDCardType, MaritalStatus, Nationality, Religion, RoomTariff, State, TypeOrg } from "@prisma/client";
+import { Answer, BookingStatus, Category, Country, Gender, GuestHouse, IDCardType, MaritalStatus, Nationality, Prisma, Religion, RoomTariff, State, TypeOrg } from "@prisma/client";
 import { z } from "zod";
 import { CreateGuestValidator } from "./guestValidators";
 
@@ -12,3 +12,13 @@ export const CreateBookingValidator = z.object({
   nosRooms: z.number().min(1)
 })
 export type TCreateBookingValidator = z.infer<typeof CreateGuestValidator>
+
+export const bookingsValidator = Prisma.validator<Prisma.BookingDetailsFindManyArgs>()({
+  include: {
+    guests: true,
+    rooms: true
+  }
+});
+export type TbookingsValidator = Prisma.BookingDetailsGetPayload<
+  typeof bookingsValidator
+>;
