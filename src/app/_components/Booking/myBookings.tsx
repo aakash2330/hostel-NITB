@@ -17,25 +17,9 @@ import { formatObject } from "~/lib/formatNestedObjects";
 import { BookingDetails } from "@prisma/client";
 import NoBookingsCard from "./noBookingsCard";
 import SingleBookingsCard from "./singleBookingCard";
-import { TbookingsValidator } from "~/utils/validators/bookingValidators";
+import { TbookingsValidator, emptyBooking } from "~/utils/validators/bookingValidators";
 
 // Usage in a component
-const emptyBooking: TbookingsValidator = {
-  id: "",
-  bookingStatus: "BOOKED",
-  hostelName: "SARAN_GUEST_HOUSE",
-  updateBy: "",
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  bookingDate: new Date(),
-  bookedFromDt: new Date(),
-  bookedToDt: new Date(),
-  remark: "",
-  bookPaymentId: "",
-  userId: "",
-  guests: [],
-  rooms: []
-}
 export default function MyBookings({ bookings }: { bookings: TbookingsValidator[] }) {
   const [selectedBooking, setSelectedBooking] = useState<BookingDetails>(bookings[0] ?? emptyBooking)
   return (

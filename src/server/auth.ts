@@ -1,18 +1,18 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import GoogleProvider from 'next-auth/providers/google';
-import CredentialsProvider from 'next-auth/providers/credentials';
 import {
   getServerSession,
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
+import CredentialsProvider from 'next-auth/providers/credentials';
 import DiscordProvider from "next-auth/providers/discord";
+import GoogleProvider from 'next-auth/providers/google';
 
-import { env } from "~/env";
-import { db } from "~/server/db";
 import { UserPermissionRole } from "@prisma/client";
-import { api } from "~/trpc/server";
+import { env } from "~/env";
 import { sendMail } from "~/lib/mail";
+import { db } from "~/server/db";
+import { api } from "~/trpc/server";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -110,9 +110,6 @@ export const authOptions: NextAuthOptions = {
     async signIn({ account, profile }) {
       console.log('account', account);
       console.log('profile', profile);
-      // FIX:remove unnecessary mals
-      const { success } = await sendMail({ subject: 'Registration NITTTR', text: 'You have successfull logged into NITTTR/hostels' });
-      console.log({ success })
       return true;
     },
     session: ({ session, token, user }) => {

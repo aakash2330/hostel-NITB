@@ -19,7 +19,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { api } from "~/trpc/react"
 
-export function PaymentCarousel() {
+export function PaymentCarousel({ bookingId }: { bookingId: string }) {
   const [capi, setApi] = React.useState<CarouselApi>()
   const sendMailMutation = api.mail.sendMail.useMutation()
 
@@ -115,7 +115,7 @@ export function PaymentCarousel() {
                       }
                       )
                     })
-                  }} href={"/"}>Done</Link>
+                  }} href={`/payment/success/${bookingId}`}>Done</Link>
                 </Button>
               </CardContent>
             </Card>

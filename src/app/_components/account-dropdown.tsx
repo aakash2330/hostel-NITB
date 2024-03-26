@@ -23,7 +23,8 @@ export default function AccountDropdown() {
     <DropdownMenuContent>
       <DropdownMenuLabel>{user ? user.name : "My Account"}</DropdownMenuLabel>
       <DropdownMenuSeparator />
-      <DropdownMenuItem><Link href='/myBookings'>My Bookings</Link></DropdownMenuItem>
+      <Link href='/myBookings'><DropdownMenuItem>My bookings</DropdownMenuItem></Link>
+
       {user ?
         <DropdownMenuItem onClick={() => { signOut() }}>Logout</DropdownMenuItem>
         : <DropdownMenuItem onClick={() => { signIn() }}>Login</DropdownMenuItem>}

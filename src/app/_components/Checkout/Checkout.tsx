@@ -1,5 +1,3 @@
-
-
 'use client';
 import { Disclosure } from '@headlessui/react';
 import { UserIcon } from "lucide-react"
@@ -18,16 +16,17 @@ import { useToast } from '~/components/ui/use-toast';
 import { api } from '~/trpc/react';
 import { CreateGuestValidator, TCreateGuestValidator } from '~/utils/validators/guestValidators';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import GuestForm from '../guests/guestForm';
 import { Input } from '~/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
+import { useRouter } from 'next/navigation';
 
 
 export default function Checkout({ roomDetails, roomCharges }: { roomDetails: RoomDetails, roomCharges: RoomCharges }) {
   const [guests, setGuests] = useState<GuestProfile[]>([])
   const [selectedGuests, setSelectedGuests] = useState<GuestProfile[]>([])
   const [selectedNumberOfRooms, setSelectedNumberOfRooms] = useState(1)
+  const router = useRouter();
   const { toast } = useToast()
   const { data: session } = useSession();
 
@@ -38,8 +37,7 @@ export default function Checkout({ roomDetails, roomCharges }: { roomDetails: Ro
         title: "Booking Successful",
         description: "200",
       })
-
-      setTimeout(() => { window.location.href = "/payment" })
+      setTimeout(() => { router.push(`/payment?id=${bookingDetails.id}`) })
     }
   })
 

@@ -13,6 +13,7 @@ import { api } from '~/trpc/react';
 import { useToast } from '~/components/ui/use-toast';
 import { ToastAction } from '~/components/ui/toast';
 import { Button } from '~/components/ui/button';
+import { sendMail } from '~/lib/mail';
 
 
 export const AuthCredentialsValidator = z
@@ -70,6 +71,9 @@ export default function RegisterComponent({
   const { toast } = useToast()
   const router = useRouter();
 
+
+  const sendMailMutation = api.mail.sendMail.useMutation()
+
   const { mutate } = api.auth.createUser.useMutation({
     onError: (err) => {
       if (err.data?.code === 'CONFLICT') {
@@ -99,7 +103,7 @@ export default function RegisterComponent({
         password,
         callbackUrl: callbackUrl ? callbackUrl : '/',
       });
-      console.log({ email, password })
+      sendMailMutation.mutate({ subject: 'Registration NITTTR', text: 'You have successfull logged into NITTTR/hostels' })
       toast({
         title: "Account Creation",
         description: "Successful",

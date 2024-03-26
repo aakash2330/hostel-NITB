@@ -74,6 +74,9 @@ export default function AdminConsole({ bookings, hostelName }: { bookings: Tbook
             <TabsTrigger onClick={() => { router.push(`/admin?hostel=${GuestHouse.VISHVESHVARAYA_GUEST_HOUSE}`) }} value={GuestHouse.VISHVESHVARAYA_GUEST_HOUSE} >
               Vishveshvaraya
             </TabsTrigger>
+            <TabsTrigger onClick={() => { router.push(`/admin?hostel=${GuestHouse.EXECUTIVE_GUEST_HOUSE}`) }} value={GuestHouse.EXECUTIVE_GUEST_HOUSE} >
+              Executive
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="overview" className="space-y-4">
             <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
@@ -81,7 +84,7 @@ export default function AdminConsole({ bookings, hostelName }: { bookings: Tbook
                 <CardHeader>
                   <CardTitle>Recent Bookings</CardTitle>
                   <CardDescription>
-                    Total 50
+                    Total {bookings.length}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="h-full">
@@ -119,7 +122,7 @@ export default function AdminConsole({ bookings, hostelName }: { bookings: Tbook
                 <CardHeader>
                   <CardTitle>Saran Bookings</CardTitle>
                   <CardDescription>
-                    Total 50
+                    Total {bookings.length}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="h-full">
@@ -157,7 +160,46 @@ export default function AdminConsole({ bookings, hostelName }: { bookings: Tbook
                 <CardHeader>
                   <CardTitle>Vishveshvaraya</CardTitle>
                   <CardDescription>
-                    Total 50
+                    Total {bookings.length}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="h-full">
+                  <RecentBookings selectedBooking={selectedBooking} setSelectedBooking={setSelectedBooking} bookings={bookings} />
+                </CardContent>
+              </Card>
+
+              <Card className="col-span-4">
+                <CardHeader>
+                  <CardTitle>Overview</CardTitle>
+                </CardHeader>
+                <CardContent className="pl-2">
+                  <pre className="mt-2 w-full rounded-md bg-slate-950 p-4 overflow-auto">
+                    {!!bookings.length ?
+                      <code className="text-white text-xs md:text-sm">
+                        {Object.keys(selectedBooking ?? {}).map((key) => {
+                          const value = selectedBooking![key as keyof typeof selectedBooking];
+                          const formattedValue = typeof value === 'object' && value !== null
+                            ? `\n${formatObject(value)}`
+                            : value
+                          return key != "guests" && key != "rooms" && <div key={key}>{`${key} - ${formattedValue}`}</div>;
+                        })}
+                      </code> :
+                      <code></code>
+                    }
+                  </pre>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+
+          <TabsContent value={GuestHouse.EXECUTIVE_GUEST_HOUSE} className="space-y-4">
+            <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-7">
+              <Card className="col-span-4 md:col-span-3">
+                <CardHeader>
+                  <CardTitle>Executive</CardTitle>
+                  <CardDescription>
+                    Total {bookings.length}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="h-full">

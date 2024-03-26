@@ -8,7 +8,7 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
-import { CreateBookingValidator } from "~/utils/validators/bookingValidators";
+import { CreateBookingValidator, emptyBooking } from "~/utils/validators/bookingValidators";
 import { CreateGuestValidator } from "~/utils/validators/guestValidators";
 
 
@@ -96,7 +96,7 @@ export const bookingRouter = createTRPCRouter({
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const { id } = input
-      const booking = await ctx.db.bookingDetails.findFirst({
+      const booking = await ctx.db.bookingDetails.findUnique({
         where: {
           id
         },
