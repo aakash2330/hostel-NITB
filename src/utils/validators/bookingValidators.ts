@@ -25,7 +25,7 @@ export type TbookingsValidator = Prisma.BookingDetailsGetPayload<
 
 export const emptyBooking: TbookingsValidator = {
   id: "",
-  bookingStatus: "BOOKED",
+  bookingStatus: "UNCONFIRMED",
   hostelName: "SARAN_GUEST_HOUSE",
   updateBy: "",
   createdAt: new Date(),

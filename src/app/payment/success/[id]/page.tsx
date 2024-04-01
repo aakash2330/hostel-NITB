@@ -4,7 +4,7 @@ import { api } from "~/trpc/server"
 export default async function Page(
   { params }: { params: { id: string } }
 ) {
-  const { booking } = await api.booking.getBookingByID.mutate({ id: params.id })
+  const { booking } = await api.booking.getBookingByID.query({ id: params.id })
   if (booking) {
     return <BookingConfirmed booking={booking}></BookingConfirmed>
   }

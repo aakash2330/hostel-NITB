@@ -97,7 +97,7 @@ async function main() {
   const bookingDetail1 = await prisma.bookingDetails.create({
     data: {
       userId: user1.id,
-      bookingStatus: BookingStatus.VACANT,
+      bookingStatus: BookingStatus.UNCONFIRMED,
       hostelName: GuestHouse.EXECUTIVE_GUEST_HOUSE,
       updateBy: "Candidate",
       createdAt: new Date().toISOString(),
@@ -114,7 +114,7 @@ async function main() {
   const bookingDetail2 = await prisma.bookingDetails.create({
     data: {
       userId: user2.id,
-      bookingStatus: BookingStatus.VACANT,
+      bookingStatus: BookingStatus.CANCELED,
       hostelName: GuestHouse.EXECUTIVE_GUEST_HOUSE,
       updateBy: "Candidate",
       createdAt: new Date().toISOString(),
@@ -152,7 +152,7 @@ async function main() {
         rentPerDay: "1000.00",
         taxes: "180.00",
         totalChargePerDay: "1180.00",
-        bookingStatus: BookingStatus.BOOKED, // Assuming AVAILABLE is a valid enum value for BookingStatus
+        bookingStatus: BookingStatus.EXPIRED, // Assuming AVAILABLE is a valid enum value for BookingStatus
         cleaningStatus: CleaningStatus.READY, // Assuming CLEAN is a valid enum value for CleaningStatus
         lastCleaningDate: new Date().toISOString(),
         createdAt: new Date().toISOString(),
@@ -187,7 +187,7 @@ async function main() {
         rentPerDay: "2000.00",
         taxes: "180.00",
         totalChargePerDay: "2180.00",
-        bookingStatus: BookingStatus.BOOKED, // Assuming AVAILABLE is a valid enum value for BookingStatus
+        bookingStatus: BookingStatus.CONFIRMED, // Assuming AVAILABLE is a valid enum value for BookingStatus
         cleaningStatus: CleaningStatus.READY, // Assuming CLEAN is a valid enum value for CleaningStatus
         lastCleaningDate: new Date().toISOString(),
         createdAt: new Date().toISOString(),
@@ -223,7 +223,7 @@ async function main() {
         rentPerDay: "800.00",
         taxes: "180.00",
         totalChargePerDay: "980.00",
-        bookingStatus: BookingStatus.BOOKED, // Assuming AVAILABLE is a valid enum value for BookingStatus
+        bookingStatus: BookingStatus.CANCELED, // Assuming AVAILABLE is a valid enum value for BookingStatus
         cleaningStatus: CleaningStatus.READY, // Assuming CLEAN is a valid enum value for CleaningStatus
         lastCleaningDate: new Date().toISOString(),
         createdAt: new Date().toISOString(),

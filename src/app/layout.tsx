@@ -7,6 +7,7 @@ import { SessionProvider } from 'next-auth/react';
 import Navbar from "./_components/navbar/navbar";
 import Footer from "./_components/footer";
 import { Toaster } from "~/components/ui/toaster";
+import { ThemeProvider } from "~/components/theme-provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,6 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+
       <body className={`relative h-full font-sans ${inter.variable}`}>
         <main className="relative flex flex-col min-h-screen " style={{ width: "100%" }}>
           <Providers>

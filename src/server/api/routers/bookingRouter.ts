@@ -19,7 +19,7 @@ export const bookingRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { hostelName, nosRooms, guestIds, remark, bookedToDt, bookingDate, bookedFromDt } = input;
       const bookingDetails = await ctx.db.bookingDetails.create({
-        data: { hostelName, remark, bookedToDt, bookingDate, bookedFromDt, bookingStatus: BookingStatus.BOOKED, bookPaymentId: "", userId: ctx.session.user.id }
+        data: { hostelName, remark, bookedToDt, bookingDate, bookedFromDt, bookingStatus: BookingStatus.UNCONFIRMED, bookPaymentId: "", userId: ctx.session.user.id }
       })
       const guests = await ctx.db.guestProfile.updateMany({
         where: {
@@ -51,7 +51,7 @@ export const bookingRouter = createTRPCRouter({
 
   getAllBookings: protectedProcedure
     .input(z.object({ hostelName: z.custom<GuestHouse>().optional() }))
-    .mutation(async ({ ctx, input }) => {
+    .query(async ({ ctx, input }) => {
       console.log(ctx.session.user.role)
       if (ctx.session.user.role != 'ADMIN') {
         const bookings = await ctx.db.bookingDetails.findMany({
@@ -94,7 +94,7 @@ export const bookingRouter = createTRPCRouter({
     }),
   getBookingByID: protectedProcedure
     .input(z.object({ id: z.string() }))
-    .mutation(async ({ ctx, input }) => {
+    .query(async ({ ctx, input }) => {
       const { id } = input
       const booking = await ctx.db.bookingDetails.findUnique({
         where: {
@@ -105,6 +105,21 @@ export const bookingRouter = createTRPCRouter({
           },
           rooms: {
           }
+        }
+      })
+      return { booking }
+    }),
+
+  updateBookingById: protectedProcedure
+    .input(z.object({ id: z.string(), bookingStatus: z.custom<BookingStatus>() }))
+    .mutation(async ({ ctx, input }) => {
+      const { id, bookingStatus } = input
+      const booking = await ctx.db.bookingDetails.update({
+        where: {
+          id
+        },
+        data: {
+          bookingStatus
         }
       })
       return { booking }

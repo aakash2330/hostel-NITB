@@ -118,12 +118,10 @@ enum RoomTariff {
 }
 
 enum BookingStatus {
-  BOOKED
-  VACANT
-  OCCUPIED
-  RESERVED
-  UNDER_MANTENANCE
-  NOT_FOR_BOOKING
+  UNCONFIRMED
+  CONFIRMED
+  CANCELED
+  EXPIRED
 }
 
 enum GuestHouse {

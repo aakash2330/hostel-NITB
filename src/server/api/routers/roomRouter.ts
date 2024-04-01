@@ -21,7 +21,8 @@ export const roomRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       console.log(ctx.session)
       const roomDetails = await ctx.db.roomDetails.findMany({})
-      return { roomDetails }
+      const roomCharges = await ctx.db.roomCharges.findMany({})
+      return { roomDetails, roomCharges }
     }),
 
   getRoomById: publicProcedure

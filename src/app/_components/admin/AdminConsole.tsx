@@ -36,7 +36,7 @@ function formatObject(obj: any, indentLevel = 1) {
 
 const emptyBooking: TbookingsValidator = {
   id: "",
-  bookingStatus: "BOOKED",
+  bookingStatus: "UNCONFIRMED",
   hostelName: "SARAN_GUEST_HOUSE",
   updateBy: "",
   createdAt: new Date(),
