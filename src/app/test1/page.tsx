@@ -1,7 +1,5 @@
+import { api } from "~/trpc/server";
 
 export default async function Page() {
-  return <div>test</div>
+  return <div></div>;
 }
-
-
-

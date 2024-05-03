@@ -18,11 +18,14 @@ export default function TiltComponent({ img }: { img: any }) {
               : 'aspect-h-4 aspect-w-3'
               } sm:aspect-none sm:h-100`}
           >
-            <img
+
+            <Image
+              unoptimized
+              priority={true}
+              src={img}
+              alt={img}
               width={100}
               height={100}
-              src={img}
-              alt={""}
               className="h-full w-full object-cover object-center sm:h-full sm:w-full"
             />
           </div>

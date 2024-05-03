@@ -1,7 +1,18 @@
-const nodemailer = require('nodemailer');
-export async function sendMail({ subject, text }: { subject: string, text: string }) {
+import * as handlebars from 'handlebars';
+import * as fs from 'fs';
+import * as path from 'path';
+import nodeMailer from 'nodemailer';
+
+type TmailOptions = {
+  from: string,
+  to: string,
+  subject: string,
+  text: string,
+  html: string
+}
+export async function sendMail({ subject, text, templatePath }: { subject: string, text: string, templatePath?: any }) {
   try {
-    const transporter = nodemailer.createTransport({
+    const transporter = nodeMailer.createTransport({
       service: 'Gmail',
       auth: {
         user: 'aakash2330@gmail.com',
@@ -9,13 +20,25 @@ export async function sendMail({ subject, text }: { subject: string, text: strin
       }
     });
     // Email data
-    const mailOptions = {
+    const mailOptions: TmailOptions = {
       from: 'aakash2330@gmail.com',
       to: 'aakash2330@gmail.com',
       subject,
-      text: text,
+      text,
+      html: ''
     };
+    if (templatePath) {
 
+      const __dirname = path.resolve();
+      const filePath = path.join(__dirname, templatePath);
+      console.log({ filePath })
+      const source = fs.readFileSync(filePath, 'utf-8').toString();
+      const template = handlebars.compile(source);
+      const replacements = {};
+      const htmlToSend = template(replacements);
+      mailOptions.html = htmlToSend
+
+    }
     // Send the email
     transporter.sendMail(mailOptions, (error: any, info: any) => {
       if (error) {

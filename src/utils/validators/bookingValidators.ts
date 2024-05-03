@@ -9,7 +9,10 @@ export const CreateBookingValidator = z.object({
   bookedToDt: z.date(),
   remark: z.string(),
   guestIds: z.array(z.string()).min(1),
-  nosRooms: z.number().min(1)
+  nosRooms: z.number().min(1).optional(),
+  nosBeds:z.number().min(1).optional(),
+  bookingType:z.enum(["ROOM", "BEDS"]),
+  roomId:z.string()
 })
 export type TCreateBookingValidator = z.infer<typeof CreateGuestValidator>
 

@@ -14,6 +14,7 @@ import {
 import { classNames } from '~/lib/classNames';
 import Link from 'next/link';
 import { GuestHouse, RoomDetails } from '@prisma/client';
+import { TbookingType } from '~/lib/utils';
 
 const roomFeatures = {
   EXECUTIVE_GUEST_HOUSE: {
@@ -30,7 +31,7 @@ const roomFeatures = {
   }
 }
 
-function ProductHeroSlider({ roomDetails }: { roomDetails: RoomDetails }) {
+function ProductHeroSlider({ roomDetails, checkin, checkout, bookingType }: { roomDetails: RoomDetails, checkin: Date, checkout: Date, bookingType: TbookingType }) {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
   return (
@@ -123,7 +124,7 @@ function ProductHeroSlider({ roomDetails }: { roomDetails: RoomDetails }) {
                 {/* Colors */}
 
                 <div className="mt-10 flex">
-                  <Link href={session ? `/checkout?id=${roomDetails.id}` : "/login"} className='w-full'>
+                  <Link href={session ? `/checkout?id=${roomDetails.id}&checkin=${checkin}&checkout=${checkout}&type=${bookingType}` : "/login"} className='w-full'>
                     <button
                       type="submit"
                       className="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-primary px-8 py-3 text-base font-medium text-white hover:bg-primary focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full"

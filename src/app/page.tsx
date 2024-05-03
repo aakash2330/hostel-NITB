@@ -12,6 +12,7 @@ export default function Home() {
 
     <main className="flex flex-col justify-center items-center gap-16">
       <section className="flex flex-col gap-2 justify-center items-center text-center">
+
         <div className="font-bold text-primary text-xl md:text-3xl">NATIONAL INSTITUTE OF</div>
         <div className="font-bold text-primary text-xl md:text-3xl"> TECHNICAL TEACHERS TRAINING AND RESEARCH, BHOPAL</div>
         <div className="text-sm text-wrap">Estd in 1965 by the Ministry of Education, Government of India, NITTTR, Bhopal stands as a distinguished Deemed University training teachers and enhancing the overall quality of the Technical Education System. Our commitment extends to the continual improvement of educational standards.</div>

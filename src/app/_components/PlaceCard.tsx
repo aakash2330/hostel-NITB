@@ -1,16 +1,17 @@
 
 import { RoomDetails } from '@prisma/client';
 import Image, { StaticImageData } from 'next/image';
+import { RouterOutputs } from '~/trpc/shared';
 // icons
 
-const AppPlaceCard = ({ data, img }: { data: RoomDetails, img: any }) => {
+const AppPlaceCard = ({ data, img }: { data: NonNullable<RouterOutputs["room"]["getRoomsByGuestHouse"]["roomDetails"]>[number], img: any }) => {
   return (
     <div className="grid sm:grid-cols-[300px,1fr] py-5 cursor-pointer grid-cols-1 gap-x-4">
       {/* left - image */}
       <div className="relative w-full mb-2 md:mb-0 sm:h-44 h-52 ">
         <Image
           unoptimized
-          priority
+          priority={true}
           src={img}
           alt={data.value}
           width={100}
@@ -25,6 +26,10 @@ const AppPlaceCard = ({ data, img }: { data: RoomDetails, img: any }) => {
           <span className="text-sm text-gray-500">{data.value}</span>
           <h3 className="text-sm text-wrap truncate">{data.remark}</h3>
           <span className="text-sm text-gray-500">{data.roomType}</span>
+        </div>
+
+        <div className="flex-grow">
+          <span className="mx-1 font-semibold">Beds Available - {+data.maxAdult - data.guests.length}</span>
         </div>
 
         {/* detail bottom */}

@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { BookingDetails, BookingStatus } from "@prisma/client"
 import { TbookingsValidator } from "~/utils/validators/bookingValidators"
+import { useRouter } from "next/navigation"
 import { api } from "~/trpc/react"
 
 
@@ -21,12 +22,11 @@ import { api } from "~/trpc/react"
 // You can use a Zod schema here if you want.
 
 export function columns(): ColumnDef<TbookingsValidator>[] {
-
-  const utils = api.useContext();
-
+  const utils = api.useUtils()
   const updateBookingStatusMutation = api.booking.updateBookingById.useMutation({
-    onSuccess: async () => {
+    onSuccess: async ({ booking }) => {
       utils.booking.getAllBookings.invalidate()
+      window.location.reload()
     }
   })
   return [
@@ -56,7 +56,7 @@ export function columns(): ColumnDef<TbookingsValidator>[] {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => { updateBookingStatusMutation.mutate({ id: row.getValue('id'), bookingStatus: BookingStatus.CONFIRMED }) }}>Confirm</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => { updateBookingStatusMutation.mutate({ id: row.getValue('id'), bookingStatus: BookingStatus.CONFIRMED },) }}>Confirm</DropdownMenuItem>
               <DropdownMenuItem onClick={() => { updateBookingStatusMutation.mutate({ id: row.getValue('id'), bookingStatus: BookingStatus.CANCELED }) }}>Cancel</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

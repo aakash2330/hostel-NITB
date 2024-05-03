@@ -7,17 +7,27 @@ export default async function Page({
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
-  const hostelName = searchParams?.hostel as GuestHouse
-  const { roomCharges } = await api.room.getAllRooms.mutate()
+  const hostelName = searchParams?.hostel as GuestHouse;
+  const { roomCharges } = await api.room.getAllRooms.mutate();
   if (hostelName && roomCharges) {
-    const { bookings } = await api.booking.getAllBookings.query({ hostelName })
-    return <AdminDashboardV2 hostelName={hostelName} roomCharges={roomCharges} key={Math.random()} bookings={bookings}></AdminDashboardV2>
-  }
-  else {
-    const { bookings } = await api.booking.getAllBookings.query({})
-    return <AdminDashboardV2 roomCharges={roomCharges} hostelName={hostelName} key={Math.random()} bookings={bookings}></AdminDashboardV2>
+    const { bookings } = await api.booking.getAllBookings.query({ hostelName });
+    return (
+      <AdminDashboardV2
+        hostelName={hostelName}
+        roomCharges={roomCharges}
+        key={Math.random()}
+        bookings={bookings}
+      ></AdminDashboardV2>
+    );
+  } else {
+    const { bookings } = await api.booking.getAllBookings.query({});
+    return (
+      <AdminDashboardV2
+        roomCharges={roomCharges}
+        hostelName={hostelName}
+        key={Math.random()}
+        bookings={bookings}
+      ></AdminDashboardV2>
+    );
   }
 }
-
-
-

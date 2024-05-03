@@ -13,6 +13,7 @@ import { Separator } from "~/components/ui/separator"
 import AppPlaceCard from '../PlaceCard';
 import SearchForm from '../SearchForm';
 import { router } from '@trpc/server';
+import { RouterOutputs } from '~/trpc/shared';
 
 const SearchPage = () => {
 
@@ -23,14 +24,14 @@ const SearchPage = () => {
   const xAdults = searchParams.get('group_adults')
   const xguests = { children: xchildren, adults: xAdults }
   const xlocation = searchParams.get('location') as GuestHouse
+  const xBookingType = searchParams.get('type')
 
   const [location, setLocation] = useState<string>('');
   const [checkIn, setCheckIn] = useState<Date>();
   const [checkOut, setCheckOut] = useState<Date>();
   const [guests, setGuests] = useState<Object>();
 
-  const [roomDetails, setRoomDetails] = useState<RoomDetails[]>()
-
+  const [roomDetails, setRoomDetails] = useState<RouterOutputs["room"]["getRoomsByGuestHouse"]["roomDetails"]>()
 
   useEffect(() => {
     setLocation(xlocation?.toString()!);
@@ -52,7 +53,9 @@ const SearchPage = () => {
   const { data } = api.room.getRoomsByGuestHouse.useQuery({ guestHouse: xlocation },
     {
       onSuccess: async ({ roomDetails }) => {
-        setRoomDetails(roomDetails)
+        if (roomDetails)
+          console.log({ roomDetails })
+        { setRoomDetails(roomDetails) }
       }
     })
 
@@ -95,7 +98,7 @@ const SearchPage = () => {
           <section className='flex flex-col gap-5'>
             {roomDetails?.map((room, index) => (
               <div key={index}>
-                <Link href={`/hostel/${room.id}`}>
+                <Link hidden={!(+room.maxAdult - room.guests.length)} href={`/hostel/${room.id}?checkin=${checkIn}&checkout=${checkOut}&type=${xBookingType}`}>
                   <AppPlaceCard key={room.id} data={room} img={room.roomImg[index]} />
                 </Link>
                 <Separator />

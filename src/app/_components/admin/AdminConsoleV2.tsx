@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import Link from "next/link"
+import Image from "next/image";
+import Link from "next/link";
 import {
   ChevronLeft,
   ChevronRight,
@@ -20,9 +20,9 @@ import {
   ShoppingCart,
   Truck,
   Users2,
-} from "lucide-react"
+} from "lucide-react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -30,7 +30,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -39,54 +39,66 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
-} from "@/components/ui/pagination"
-import { Progress } from "@/components/ui/progress"
-import { Separator } from "@/components/ui/separator"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
+} from "@/components/ui/pagination";
+import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
-import { DataTable } from "../table/data-table"
-import { columns } from "../table/columns"
-import { BookingDetails, GuestHouse, RoomCharges, TypeOrg } from "@prisma/client"
-import { useState } from "react"
-import { TbookingsValidator, emptyBooking } from "~/utils/validators/bookingValidators"
-import { useRouter } from "next/navigation"
+import { DataTable } from "../table/data-table";
+import { columns } from "../table/columns";
+import {
+  BookingDetails,
+  GuestHouse,
+  RoomCharges,
+  TypeOrg,
+} from "@prisma/client";
+import { useState } from "react";
+import {
+  TbookingsValidator,
+  emptyBooking,
+} from "~/utils/validators/bookingValidators";
+import { useRouter } from "next/navigation";
+import downloadToExcel from "~/lib/xlsx";
+import { api } from "~/trpc/react";
 
-function findRoomCharge(roomCharges: RoomCharges[], booking: TbookingsValidator, typeOrg: TypeOrg) {
-  const rates = roomCharges.find((r) => { return r.hostelName == booking.hostelName })
+function findRoomCharge(
+  roomCharges: RoomCharges[],
+  booking: TbookingsValidator,
+  typeOrg: TypeOrg,
+) {
+  const rates = roomCharges.find((r) => {
+    return r.hostelName == booking.hostelName;
+  });
   if (rates) {
-    return rates[typeOrg]
-  }
-  else return 0
+    return rates[typeOrg];
+  } else return 0;
 }
 
-export default function AdminDashboardV2({ bookings, hostelName, roomCharges }: { bookings: TbookingsValidator[], hostelName: GuestHouse, roomCharges: RoomCharges[] }) {
-  const [selectedBooking, setSelectedBooking] = useState<TbookingsValidator>(bookings[0] ?? emptyBooking)
+export default function AdminDashboardV2({
+  bookings,
+  hostelName,
+  roomCharges,
+}: {
+  bookings: TbookingsValidator[];
+  hostelName: GuestHouse;
+  roomCharges: RoomCharges[];
+}) {
+  const [selectedBooking, setSelectedBooking] = useState<TbookingsValidator>(
+    bookings[0] ?? emptyBooking,
+  );
   const router = useRouter();
+  const sendMailMutation = api.mail.sendMail.useMutation();
   return (
     <TooltipProvider>
       <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -102,13 +114,21 @@ export default function AdminDashboardV2({ bookings, hostelName, roomCharges }: 
                     </CardDescription>
                   </CardHeader>
                   <CardFooter>
-                    <Button><Link href={"/admin/bookings/create"} >Create New Bookings</Link></Button>
+                    <Button>
+                      <Link href={"/admin/bookings/create"}>
+                        Create New Bookings
+                      </Link>
+                    </Button>
                   </CardFooter>
                 </Card>
                 <Card>
                   <CardHeader className="pb-2">
                     <CardDescription>Confirmed Bookings</CardDescription>
-                    <CardTitle className="text-4xl">{bookings.reduce((a, c) => { return c.bookingStatus == "CONFIRMED" ? a + 1 : a }, 0)}</CardTitle>
+                    <CardTitle className="text-4xl">
+                      {bookings.reduce((a, c) => {
+                        return c.bookingStatus == "CONFIRMED" ? a + 1 : a;
+                      }, 0)}
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="text-xs text-muted-foreground">
@@ -116,13 +136,24 @@ export default function AdminDashboardV2({ bookings, hostelName, roomCharges }: 
                     </div>
                   </CardContent>
                   <CardFooter>
-                    <Progress value={5 * bookings.reduce((a, c) => { return c.bookingStatus == "CONFIRMED" ? a + 1 : a }, 0)} />
+                    <Progress
+                      value={
+                        5 *
+                        bookings.reduce((a, c) => {
+                          return c.bookingStatus == "CONFIRMED" ? a + 1 : a;
+                        }, 0)
+                      }
+                    />
                   </CardFooter>
                 </Card>
                 <Card>
                   <CardHeader className="pb-2">
                     <CardDescription>Unconfirmed Bookings</CardDescription>
-                    <CardTitle className="text-4xl">{bookings.reduce((a, c) => { return c.bookingStatus == "UNCONFIRMED" ? a + 1 : a }, 0)}</CardTitle>
+                    <CardTitle className="text-4xl">
+                      {bookings.reduce((a, c) => {
+                        return c.bookingStatus == "UNCONFIRMED" ? a + 1 : a;
+                      }, 0)}
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="text-xs text-muted-foreground">
@@ -130,21 +161,59 @@ export default function AdminDashboardV2({ bookings, hostelName, roomCharges }: 
                     </div>
                   </CardContent>
                   <CardFooter>
-                    <Progress value={bookings.length - bookings.reduce((a, c) => { return c.bookingStatus == "UNCONFIRMED" ? a + 1 : a }, 0)} />
+                    <Progress
+                      value={
+                        bookings.length -
+                        bookings.reduce((a, c) => {
+                          return c.bookingStatus == "UNCONFIRMED" ? a + 1 : a;
+                        }, 0)
+                      }
+                    />
                   </CardFooter>
                 </Card>
               </div>
               <Tabs defaultValue={hostelName ?? "all"}>
                 <div className="flex items-center">
                   <TabsList>
-                    <TabsTrigger onClick={() => { router.push(`/admin`, { scroll: false }) }} value="all">All</TabsTrigger>
-                    <TabsTrigger onClick={() => { router.push(`/admin?hostel=${GuestHouse.SARAN_GUEST_HOUSE}`, { scroll: false }) }} value={GuestHouse.SARAN_GUEST_HOUSE} >
+                    <TabsTrigger
+                      onClick={() => {
+                        router.push(`/admin`, { scroll: false });
+                      }}
+                      value="all"
+                    >
+                      All
+                    </TabsTrigger>
+                    <TabsTrigger
+                      onClick={() => {
+                        router.push(
+                          `/admin?hostel=${GuestHouse.SARAN_GUEST_HOUSE}`,
+                          { scroll: false },
+                        );
+                      }}
+                      value={GuestHouse.SARAN_GUEST_HOUSE}
+                    >
                       Saran
                     </TabsTrigger>
-                    <TabsTrigger onClick={() => { router.push(`/admin?hostel=${GuestHouse.VISHVESHVARAYA_GUEST_HOUSE}`, { scroll: false }) }} value={GuestHouse.VISHVESHVARAYA_GUEST_HOUSE} >
+                    <TabsTrigger
+                      onClick={() => {
+                        router.push(
+                          `/admin?hostel=${GuestHouse.VISHVESHVARAYA_GUEST_HOUSE}`,
+                          { scroll: false },
+                        );
+                      }}
+                      value={GuestHouse.VISHVESHVARAYA_GUEST_HOUSE}
+                    >
                       Vishveshvaraya
                     </TabsTrigger>
-                    <TabsTrigger onClick={() => { router.push(`/admin?hostel=${GuestHouse.EXECUTIVE_GUEST_HOUSE}`, { scroll: false }) }} value={GuestHouse.EXECUTIVE_GUEST_HOUSE} >
+                    <TabsTrigger
+                      onClick={() => {
+                        router.push(
+                          `/admin?hostel=${GuestHouse.EXECUTIVE_GUEST_HOUSE}`,
+                          { scroll: false },
+                        );
+                      }}
+                      value={GuestHouse.EXECUTIVE_GUEST_HOUSE}
+                    >
                       Executive
                     </TabsTrigger>
                   </TabsList>
@@ -180,7 +249,12 @@ export default function AdminDashboardV2({ bookings, hostelName, roomCharges }: 
                       className="h-7 gap-1 text-sm"
                     >
                       <File className="h-3.5 w-3.5" />
-                      <span className="sr-only sm:not-sr-only">Export</span>
+                      <span
+                        onClick={() => downloadToExcel({ bookings })}
+                        className="sr-only sm:not-sr-only"
+                      >
+                        Export
+                      </span>
                     </Button>
                   </div>
                 </div>
@@ -188,12 +262,15 @@ export default function AdminDashboardV2({ bookings, hostelName, roomCharges }: 
                   <Card>
                     <CardHeader className="px-7">
                       <CardTitle>All Bookings</CardTitle>
-                      <CardDescription>
-                        Recent Bookings
-                      </CardDescription>
+                      <CardDescription>Recent Bookings</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <DataTable selectedBooking={selectedBooking} setSelectedBooking={setSelectedBooking} columns={columns()} data={bookings} />
+                      <DataTable
+                        selectedBooking={selectedBooking}
+                        setSelectedBooking={setSelectedBooking}
+                        columns={columns()}
+                        data={bookings}
+                      />
                     </CardContent>
                   </Card>
                 </TabsContent>
@@ -202,12 +279,15 @@ export default function AdminDashboardV2({ bookings, hostelName, roomCharges }: 
                   <Card>
                     <CardHeader className="px-7">
                       <CardTitle>{GuestHouse.SARAN_GUEST_HOUSE}</CardTitle>
-                      <CardDescription>
-                        Recent Bookings
-                      </CardDescription>
+                      <CardDescription>Recent Bookings</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <DataTable selectedBooking={selectedBooking} setSelectedBooking={setSelectedBooking} columns={columns()} data={bookings} />
+                      <DataTable
+                        selectedBooking={selectedBooking}
+                        setSelectedBooking={setSelectedBooking}
+                        columns={columns()}
+                        data={bookings}
+                      />
                     </CardContent>
                   </Card>
                 </TabsContent>
@@ -215,13 +295,18 @@ export default function AdminDashboardV2({ bookings, hostelName, roomCharges }: 
                 <TabsContent value={GuestHouse.VISHVESHVARAYA_GUEST_HOUSE}>
                   <Card>
                     <CardHeader className="px-7">
-                      <CardTitle>{GuestHouse.VISHVESHVARAYA_GUEST_HOUSE}</CardTitle>
-                      <CardDescription>
-                        Recent Bookings
-                      </CardDescription>
+                      <CardTitle>
+                        {GuestHouse.VISHVESHVARAYA_GUEST_HOUSE}
+                      </CardTitle>
+                      <CardDescription>Recent Bookings</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <DataTable selectedBooking={selectedBooking} setSelectedBooking={setSelectedBooking} columns={columns()} data={bookings} />
+                      <DataTable
+                        selectedBooking={selectedBooking}
+                        setSelectedBooking={setSelectedBooking}
+                        columns={columns()}
+                        data={bookings}
+                      />
                     </CardContent>
                   </Card>
                 </TabsContent>
@@ -230,12 +315,15 @@ export default function AdminDashboardV2({ bookings, hostelName, roomCharges }: 
                   <Card>
                     <CardHeader className="px-7">
                       <CardTitle>{GuestHouse.EXECUTIVE_GUEST_HOUSE}</CardTitle>
-                      <CardDescription>
-                        Recent Bookings
-                      </CardDescription>
+                      <CardDescription>Recent Bookings</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <DataTable selectedBooking={selectedBooking} setSelectedBooking={setSelectedBooking} columns={columns()} data={bookings} />
+                      <DataTable
+                        selectedBooking={selectedBooking}
+                        setSelectedBooking={setSelectedBooking}
+                        columns={columns()}
+                        data={bookings}
+                      />
                     </CardContent>
                   </Card>
                 </TabsContent>
@@ -246,9 +334,11 @@ export default function AdminDashboardV2({ bookings, hostelName, roomCharges }: 
                 <CardHeader className="flex flex-row items-start bg-muted/50">
                   <div className="grid gap-0.5">
                     <CardTitle className="group flex items-center gap-2 text-lg">
-                      Order ID {selectedBooking.id}
+                      Booking Id - {selectedBooking.id}
                     </CardTitle>
-                    <CardDescription>{selectedBooking.createdAt.toDateString()}</CardDescription>
+                    <CardDescription>
+                      {selectedBooking.createdAt.toDateString()}
+                    </CardDescription>
                   </div>
                 </CardHeader>
                 <CardContent className="p-6 text-sm">
@@ -265,40 +355,64 @@ export default function AdminDashboardV2({ bookings, hostelName, roomCharges }: 
                     <div className="font-semibold">Room Details</div>
                     <ul className="grid gap-3">
                       {selectedBooking.rooms.map((r) => {
-                        return <li key={r.id} className="flex items-center justify-between">
-                          <span className="text-muted-foreground">
-                            {r.code}
-                          </span>
-                          <span>{r.rentPerDay}</span>
-                        </li>
+                        return (
+                          <li
+                            key={r.id}
+                            className="flex items-center justify-between"
+                          >
+                            <span className="text-muted-foreground">
+                              {r.code}
+                            </span>
+                            <span>{r.rentPerDay}</span>
+                          </li>
+                        );
                       })}
                     </ul>
                     <Separator className="my-2" />
                     <div className="font-semibold">Guests Details</div>
                     <ul className="grid gap-3">
                       {selectedBooking.guests.map((g) => {
-                        return <li key={g.id} className="flex items-center justify-between">
-                          <span className="text-muted-foreground">
-                            {g.name}
-                          </span>
-                          <span>{g.email}</span>
-                        </li>
+                        return (
+                          <li
+                            key={g.id}
+                            className="flex items-center justify-between"
+                          >
+                            <span className="text-muted-foreground">
+                              {g.name}
+                            </span>
+                            <span>{g.email}</span>
+                          </li>
+                        );
                       })}
                     </ul>
                     <Separator className="my-2" />
                     <ul className="grid gap-3">
                       <li className="flex items-center justify-between font-semibold">
                         <span className="text-muted-foreground">Total</span>
-                        <span>₹{selectedBooking.guests.reduce((a, c) => { return a + findRoomCharge(roomCharges, selectedBooking, c.typeOrg) }, 0)}</span>
+                        <span>
+                          ₹
+                          {selectedBooking.guests.reduce((a, c) => {
+                            return (
+                              a +
+                              findRoomCharge(
+                                roomCharges,
+                                selectedBooking,
+                                c.typeOrg,
+                              )
+                            );
+                          }, 0)}
+                        </span>
                       </li>
                     </ul>
                   </div>
                   <Separator className="my-4" />
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-3 gap-4">
                     <div className="grid gap-3">
                       <div className="font-semibold">Check In</div>
                       <address className="grid gap-0.5 not-italic text-muted-foreground">
-                        <span>{selectedBooking.bookedFromDt.toDateString()}</span>
+                        <span>
+                          {selectedBooking.bookedFromDt.toDateString()}
+                        </span>
                       </address>
                     </div>
                     <div className="grid auto-rows-max gap-3">
@@ -306,6 +420,12 @@ export default function AdminDashboardV2({ bookings, hostelName, roomCharges }: 
                       <div className="text-muted-foreground">
                         {selectedBooking.bookedToDt.toDateString()}
                       </div>
+                    </div>
+                    <div className="grid gap-3">
+                      <div className="font-semibold">Status</div>
+                      <address className="grid gap-0.5 not-italic text-muted-foreground">
+                        <span>{selectedBooking.bookingStatus}</span>
+                      </address>
                     </div>
                   </div>
                   <Separator className="my-4" />
@@ -319,7 +439,9 @@ export default function AdminDashboardV2({ bookings, hostelName, roomCharges }: 
                       <div className="flex items-center justify-between">
                         <dt className="text-muted-foreground">Email</dt>
                         <dd>
-                          <a href="mailto:">{selectedBooking.guests[0]?.email}</a>
+                          <a href="mailto:">
+                            {selectedBooking.guests[0]?.email}
+                          </a>
                         </dd>
                       </div>
                       <div className="flex items-center justify-between">
@@ -344,18 +466,29 @@ export default function AdminDashboardV2({ bookings, hostelName, roomCharges }: 
                 </CardContent>
                 <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
                   <div className="text-xs text-muted-foreground">
-                    Updated <time dateTime="2023-11-23">{new Date().toDateString()}</time>
+                    Updated{" "}
+                    <time dateTime="2023-11-23">
+                      {new Date().toDateString()}
+                    </time>
                   </div>
                   <Pagination className="ml-auto mr-0 w-auto">
                     <PaginationContent>
                       <PaginationItem>
-                        <Button size="icon" variant="outline" className="h-6 w-6">
+                        <Button
+                          size="icon"
+                          variant="outline"
+                          className="h-6 w-6"
+                        >
                           <ChevronLeft className="h-3.5 w-3.5" />
                           <span className="sr-only">Previous Order</span>
                         </Button>
                       </PaginationItem>
                       <PaginationItem>
-                        <Button size="icon" variant="outline" className="h-6 w-6">
+                        <Button
+                          size="icon"
+                          variant="outline"
+                          className="h-6 w-6"
+                        >
                           <ChevronRight className="h-3.5 w-3.5" />
                           <span className="sr-only">Next Order</span>
                         </Button>
@@ -368,8 +501,6 @@ export default function AdminDashboardV2({ bookings, hostelName, roomCharges }: 
           </main>
         </div>
       </div>
-
     </TooltipProvider>
-  )
+  );
 }
-

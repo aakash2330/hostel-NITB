@@ -100,7 +100,7 @@ export default async function BookingConfirmed({ booking }: { booking: Tbookings
       <div className="space-y-3">
         <div className="font-extrabold">Payment Details</div>
         <div className="flex justify-between items-center">
-          <div className="text-sm">Total Amount Paid</div>
+          <div className="text-sm">Total Amount To be Paid</div>
           <div className="text-sm font-extrabold">₹{2000}</div>
         </div>
       </div>

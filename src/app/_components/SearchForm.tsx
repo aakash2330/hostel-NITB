@@ -31,6 +31,7 @@ import { GuestHouse } from "@prisma/client";
 import { api } from "~/trpc/react";
 import bannerImg from "public/banner.jpg"
 import Image from "next/image";
+import { useState } from "react";
 
 
 export const formSchema = z.object({
@@ -50,11 +51,16 @@ export const formSchema = z.object({
   }),
   rooms: z.string().min(1, {
     message: "Please select at least 1 room",
-  }),
+  }).optional(),
+  beds: z.string().min(1, {
+    message: "Please select at least 1 bed",
+  }).optional(),
 });
 
 function SearchForm() {
 
+
+  const [selectedGuestHouse, setSelectedGuestHouse] = useState<GuestHouse>()
   const utils = api.useContext();
   const router = useRouter();
   const searchParams = useSearchParams()
@@ -75,8 +81,10 @@ function SearchForm() {
       adults: xAdults ?? "1",
       children: xchildren ?? "0",
       rooms: "1",
+      beds: "1",
     },
   });
+  const getRoomDetailsQuery = api.room.getRoomByDetails.useMutation()
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
@@ -88,19 +96,50 @@ function SearchForm() {
     const checkout_month = (values.dates.to.getMonth() + 1).toString();
     const checkout_year = values.dates.to.getFullYear().toString();
 
-    const checkin = `${checkin_year}-${checkin_month}-${checkin_monthday}`;
-    const checkout = `${checkout_year}-${checkout_month}-${checkout_monthday}`;
+    //const checkin = `${checkin_year}-${checkin_month}-${checkin_monthday}`;
+    //const checkout = `${checkout_year}-${checkout_month}-${checkout_monthday}`;
 
-    const queryParameters = new URLSearchParams();
-    queryParameters.set("location", values.location);
-    queryParameters.set("group_adults", values.adults.toString());
-    queryParameters.set("group_children", values.children.toString());
-    queryParameters.set("no_rooms", values.rooms.toString());
-    queryParameters.set("checkin", checkin);
-    queryParameters.set("checkout", checkout);
+    const checkin = values.dates.from;
+    const checkout = values.dates.to;
+    let bookingType: "ROOM" | "BEDS";
+
+    if (selectedGuestHouse == "EXECUTIVE_GUEST_HOUSE") {
+      bookingType = "ROOM"
+    }
+    else {
+      bookingType = "BEDS"
+    }
+
+    getRoomDetailsQuery.mutate({
+      guestHouse: values.location as GuestHouse,
+      bookedFrom: checkin,
+      bookedTo: checkout,
+      bookingType,
+      quantity: selectedGuestHouse == GuestHouse.EXECUTIVE_GUEST_HOUSE ? +values.rooms! : +values.beds!
+    },
+      {
+        onSuccess: async ({ roomDetails }) => {
+          console.log({ roomDetails })
+          if (roomDetails) {
+            const queryParameters = new URLSearchParams();
+            queryParameters.set("checkin", checkin.toString());
+            queryParameters.set("checkout", checkout.toString());
+            queryParameters.set("type", bookingType.toString());
+            //if rooms , take to single hostel page directly
+            //if beds , take to search page
+            //router.push(`/hostel/${roomDetails.id}?${queryParameters.toString()}`);
+            //
+            queryParameters.set("location", values.location);
+            router.push(`/search?${queryParameters.toString()}`);
+          }
+          else {
+            alert("rooms unavailable for the selected inputs")
+          }
+        }
+      })
 
     // Use only the path and the constructed query string for navigation
-    router.push(`/search?${queryParameters.toString()}`);
+
     utils.room.getRoomsByGuestHouse.invalidate()
   }
 
@@ -117,13 +156,16 @@ function SearchForm() {
             control={form.control}
             name="location"
             render={({ field }) => (
-              <FormItem>
+              <FormItem onChange={(v) => {
+                //@ts-ignore 
+                setSelectedGuestHouse(v.target.value)
+              }}>
                 <FormLabel className="font-extrabold flex">
                   Location
                   <BedDoubleIcon className="ml-2 h-4 w-4 text-black" />
                 </FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
+                  <FormControl >
                     <SelectTrigger>
                       <SelectValue placeholder="Select Guest House" />
                     </SelectTrigger>
@@ -229,21 +271,41 @@ function SearchForm() {
             />
           </div>
 
-          <div className="grid items-center flex-1">
-            <FormField
-              control={form.control}
-              name="rooms"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel className="font-extrabold">Rooms</FormLabel>
-                  <FormMessage />
-                  <FormControl>
-                    <Input type="number" placeholder="rooms" {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
+
+          {selectedGuestHouse == GuestHouse.EXECUTIVE_GUEST_HOUSE &&
+            <div className="grid items-center flex-1">
+              <FormField
+                control={form.control}
+                name="rooms"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel className="font-extrabold">Rooms</FormLabel>
+                    <FormMessage />
+                    <FormControl>
+                      <Input min={1} max={1} type="number" placeholder="rooms" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>}
+
+          {selectedGuestHouse != GuestHouse.EXECUTIVE_GUEST_HOUSE &&
+            <div className="grid items-center flex-1">
+              <FormField
+                control={form.control}
+                name="beds"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel className="font-extrabold">Beds</FormLabel>
+                    <FormMessage />
+                    <FormControl>
+                      <Input min={1} max={3} type="number" placeholder="beds" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+          }
 
           <div className="mt-auto">
             <Button type="submit" className="bg-blue-500 text-base">
