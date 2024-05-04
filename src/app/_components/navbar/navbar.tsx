@@ -122,7 +122,9 @@ const Navbar = () => {
                   </a>
                 ))}
               </div>
-              <AccountDropdown></AccountDropdown>
+              {user ? 
+              <AccountDropdown></AccountDropdown>:<Button onClick={() => { signIn() }}>Login</Button>
+              }
             </div>
           </div>
         </nav>

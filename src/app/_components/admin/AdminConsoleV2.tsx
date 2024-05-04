@@ -71,6 +71,7 @@ import {
 import { useRouter } from "next/navigation";
 import downloadToExcel from "~/lib/xlsx";
 import { api } from "~/trpc/react";
+import { removeUnderscore } from "~/lib/utils";
 
 function findRoomCharge(
   roomCharges: RoomCharges[],
@@ -278,7 +279,7 @@ export default function AdminDashboardV2({
                 <TabsContent value={GuestHouse.SARAN_GUEST_HOUSE}>
                   <Card>
                     <CardHeader className="px-7">
-                      <CardTitle>{GuestHouse.SARAN_GUEST_HOUSE}</CardTitle>
+                      <CardTitle>{removeUnderscore(GuestHouse.SARAN_GUEST_HOUSE)}</CardTitle>
                       <CardDescription>Recent Bookings</CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -296,7 +297,7 @@ export default function AdminDashboardV2({
                   <Card>
                     <CardHeader className="px-7">
                       <CardTitle>
-                        {GuestHouse.VISHVESHVARAYA_GUEST_HOUSE}
+                        {removeUnderscore(GuestHouse.VISHVESHVARAYA_GUEST_HOUSE)}
                       </CardTitle>
                       <CardDescription>Recent Bookings</CardDescription>
                     </CardHeader>
@@ -314,7 +315,7 @@ export default function AdminDashboardV2({
                 <TabsContent value={GuestHouse.EXECUTIVE_GUEST_HOUSE}>
                   <Card>
                     <CardHeader className="px-7">
-                      <CardTitle>{GuestHouse.EXECUTIVE_GUEST_HOUSE}</CardTitle>
+                      <CardTitle>{removeUnderscore(GuestHouse.EXECUTIVE_GUEST_HOUSE)}</CardTitle>
                       <CardDescription>Recent Bookings</CardDescription>
                     </CardHeader>
                     <CardContent>

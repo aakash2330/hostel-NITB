@@ -48,14 +48,10 @@ export default function MyBookings({ bookings }: { bookings: TbookingsValidator[
                   <CardTitle>Overview</CardTitle>
                 </CardHeader>
                 <CardContent className="pl-2">
-                  <pre className="mt-2 w-full rounded-md bg-slate-950 p-4 overflow-auto">
-                    <code className="text-white text-xs md:text-sm">
-                      {Object.keys(selectedBooking ?? {}).map((key) => {
-                        const value = selectedBooking![key as keyof typeof selectedBooking];
-                        const formattedValue = typeof value === 'object' && value !== null
-                          ? `\n${formatObject(value)}`
-                          : value
-                        return key != "guests" && key != "rooms" && <div key={key}>{`${key} - ${formattedValue}`}</div>;
+                  <pre className="mt-2 w-full rounded-md  p-4 overflow-auto">
+                    <code className="text-black text-xs md:text-sm space-y-5">
+                      {Object.keys(selectedBooking ?? {}).map((key,index) => {
+                        return key=="guests" || key=="rooms" ? <div key={index}></div>:<div key={index}>{key} : {selectedBooking[key as keyof BookingDetails].toString()}</div>
                       })}
                     </code>
                   </pre>

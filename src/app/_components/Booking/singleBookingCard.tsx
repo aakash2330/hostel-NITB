@@ -14,7 +14,6 @@ export default function SingleBookingsCard({ booking }: { booking: TbookingsVali
     <div className="col-span-2 justify-center items-center gap-2  flex flex-col">
       <div className="text-sm font-bold underline">Upcoming Booking</div>
       <div className="flex justify-center gap-6 text-sm items-center">
-        <Image src={booking.rooms[0]?.roomImg[0] ?? Backpack} width={100} height={100} alt="Backpack"></Image>
         <div className="flex flex-col">
           <div className="font-extrabold">{booking.hostelName}</div>
           <div className="flex justify-center items-center gap-4">

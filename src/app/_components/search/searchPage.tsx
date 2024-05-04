@@ -14,6 +14,7 @@ import AppPlaceCard from '../PlaceCard';
 import SearchForm from '../SearchForm';
 import { router } from '@trpc/server';
 import { RouterOutputs } from '~/trpc/shared';
+import { removeUnderscore } from '~/lib/utils';
 
 const SearchPage = () => {
 
@@ -76,7 +77,7 @@ const SearchPage = () => {
           </span>
           {/* title */}
           <h1 className="mb-2 text-sm md:text-2xl font-semibold  lg:text-4xl lg:mb-7">
-            Stays in {location}
+            Stays in {removeUnderscore(location)}
           </h1>
           {/* filters */}
           <div className="mb-4 space-x-1 space-y-2 text-gray-400 md:space-x-2 lg:mb-8">

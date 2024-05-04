@@ -46,7 +46,6 @@ export function columns(): ColumnDef<TbookingsValidator>[] {
     {
       id: "actions",
       cell: ({ row }) => {
-        const payment = row.original
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

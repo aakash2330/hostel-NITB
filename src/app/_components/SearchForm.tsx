@@ -245,7 +245,7 @@ function SearchForm() {
               name="adults"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel className="font-extrabold">Adults</FormLabel>
+                  <FormLabel className="font-extrabold">Guests</FormLabel>
                   <FormMessage />
                   <FormControl>
                     <Input type="number" placeholder="Adults" {...field} />
@@ -255,21 +255,6 @@ function SearchForm() {
             />
           </div>
 
-          <div className="grid items-center flex-1">
-            <FormField
-              control={form.control}
-              name="children"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel className="font-extrabold">Children</FormLabel>
-                  <FormMessage />
-                  <FormControl>
-                    <Input type="number" placeholder="Children" {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
 
 
           {selectedGuestHouse == GuestHouse.EXECUTIVE_GUEST_HOUSE &&
