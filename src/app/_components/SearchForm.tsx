@@ -257,7 +257,7 @@ function SearchForm() {
 
 
 
-          {selectedGuestHouse == GuestHouse.EXECUTIVE_GUEST_HOUSE &&
+          {/*selectedGuestHouse == GuestHouse.EXECUTIVE_GUEST_HOUSE &&
             <div className="grid items-center flex-1">
               <FormField
                 control={form.control}
@@ -272,9 +272,9 @@ function SearchForm() {
                   </FormItem>
                 )}
               />
-            </div>}
+            </div>*/}
 
-          {selectedGuestHouse != GuestHouse.EXECUTIVE_GUEST_HOUSE &&
+          {/*selectedGuestHouse != GuestHouse.EXECUTIVE_GUEST_HOUSE &&
             <div className="grid items-center flex-1">
               <FormField
                 control={form.control}
@@ -290,7 +290,7 @@ function SearchForm() {
                 )}
               />
             </div>
-          }
+          */}
 
           <div className="mt-auto">
             <Button type="submit" className="bg-blue-500 text-base">
