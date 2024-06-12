@@ -99,7 +99,7 @@ export default function Login() {
       <div className=' h-[1px] bg-gray-300 w-[30%]'></div>
     </div>
     <div className='flex justify-center w-full items-center gap-3'>
-      <LoginWithGoogle></LoginWithGoogle>
+      <LoginWithGoogle/>
     </div>
   </Card >
 }

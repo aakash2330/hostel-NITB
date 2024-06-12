@@ -10,9 +10,10 @@ import Footer from "~/components/HomePage /footer";
 import PhotoModal from "~/components/HomePage /PhotoModal";
 import { motion } from "framer-motion";
 import { slideInFromLeft, slideInFromTop } from "~/utils/motion";
+import { useState } from "react";
 
 export default function Home() {
-
+  const [showModal, setShowModal] = useState(false);
 
   return (
 
@@ -34,7 +35,7 @@ export default function Home() {
 
         <PhotoModal />
 
-        <Accomodation />
+        <Accomodation showModal={showModal} setShowModal={setShowModal}/>
 
         <MapSection />
         <VipCard />

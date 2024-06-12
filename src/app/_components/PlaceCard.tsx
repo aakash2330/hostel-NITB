@@ -1,14 +1,24 @@
+import Image, { StaticImageData } from "next/image";
+import { FaIndianRupeeSign } from "react-icons/fa6";
+import Link from "next/link";
+import { MdBedroomParent } from "react-icons/md";
+import { MdOutlineEventAvailable } from "react-icons/md";
+import { SiLevelsdotfyi } from "react-icons/si";
 
-import { RoomDetails } from '@prisma/client';
-import Image, { StaticImageData } from 'next/image';
-import { RouterOutputs } from '~/trpc/shared';
-// icons
 
-const AppPlaceCard = ({ data, img }: { data: NonNullable<RouterOutputs["room"]["getRoomsByGuestHouse"]["roomDetails"]>[number], img: any }) => {
+
+const AppPlaceCard = ({
+  data,
+  img,
+  room,
+  checkIn,
+  checkOut,
+  xBookingType,
+}: any) => {
   return (
-    <div className="grid sm:grid-cols-[300px,1fr] py-5 cursor-pointer grid-cols-1 gap-x-4">
+    <div className="pt-4 flex max-w-xs flex-col rounded-xl border border-gray-300 bg-gray-300 bg-gradient-to-tr from-slate-100 p-4">
       {/* left - image */}
-      <div className="relative w-full mb-2 md:mb-0 sm:h-44 h-52 ">
+      <div className="relative mb-2 h-52 w-full sm:h-44 md:mb-0 ">
         <Image
           unoptimized
           priority={true}
@@ -16,32 +26,48 @@ const AppPlaceCard = ({ data, img }: { data: NonNullable<RouterOutputs["room"]["
           alt={data.value}
           width={100}
           height={100}
-          className="w-full h-44 rounded-xl"
+          className="h-44 w-full rounded-xl"
         />
       </div>
       {/* right - detail */}
-      <div className="flex flex-col px-1 sm:px-0">
+      <div className="flex w-fit flex-col gap-4 pt-4">
         {/* detail top */}
-        <div className="flex-grow">
-          <span className="text-sm text-gray-500">{data.value}</span>
-          <h3 className="text-sm text-wrap truncate">{data.remark}</h3>
-          <span className="text-sm text-gray-500">{data.roomType}</span>
-        </div>
-
-        <div className="flex-grow">
-          <span className="mx-1 font-semibold">Beds Available - {+data.maxAdult - data.guests.length}</span>
+        <div className="flex w-auto flex-col gap-2">
+          <div className="flex items-center justify-between pr-4">
+            <span className="text-xl text-gray-500 flex items-center"> <MdBedroomParent className="text-4xl"/> {data.value}</span>
+            <span className="text-xl text-gray-500">{data.roomType}</span>
+          </div>
+          <div className="flex ml-1">
+            <span className="font-semibold flex items-center text-xl">
+            <MdOutlineEventAvailable className="text-2xl"/>
+              Beds Available - {+data.maxAdult - data.guests.length}
+            </span>
+          </div>
+          <h3 className="flex text-sm pl-2">{data.remark}</h3>
         </div>
 
         {/* detail bottom */}
-        <div className="flex justify-between order-first sm:order-none">
-          <div className="flex items-center">
-            <span className="mx-1 font-semibold">{data.occupancy}</span>
-            <span className="text-xs text-gray-500">({data.floor})</span>
+
+        <div className="order-first flex w-fit flex-col gap-2 sm:order-none pl-2">
+          <div className="flex gap-2 items-center ">
+          <SiLevelsdotfyi />
+            <span className="font-semibold">{data.occupancy}</span>
+            <span className="text-base text-gray-500">{data.floor}</span>
           </div>
           <div>
-            <span className="mr-1 text-sm md:text-lg font-semibold">{data.totalChargePerDay}</span>
-            <span className="font-light md:text-lg text-md">/ night</span>
+            <span className="flex items-center gap-2 text-sm font-semibold md:text-lg">
+              <FaIndianRupeeSign /> {data.totalChargePerDay}/ night
+            </span>
           </div>
+          <Link
+            hidden={!(+room.maxAdult - room.guests.length)}
+            href={`/hostel/${room.id}?checkin=${checkIn}&checkout=${checkOut}&type=${xBookingType}`}
+            className="flex"
+          >
+            <button className="w-fit rounded-xl bg-blue-500 p-2 px-4 text-white duration-300 hover:bg-blue-600 active:scale-90">
+              Book Now
+            </button>
+          </Link>
         </div>
       </div>
     </div>

@@ -7,8 +7,8 @@ import { useEffect, useState } from 'react';
 import SearchForm from '~/app/_components/SearchForm';
 import { motion } from "framer-motion";
 
-const Accomodation = () => {
-  const [showModal, setShowModal] = useState(false);
+const Accomodation = ({showModal,setShowModal}:any) => {
+  
   const openModal = () => {
     setShowModal(true);
   };
@@ -107,11 +107,13 @@ const Accomodation = () => {
               </div>
             </div>
           </motion.div>
-          <div className="absolute bottom-1/2 right-0 -translate-x-[-50%] bg-white shadow-xl shadow-gray-500 p-4 rounded-lg">
+          <div className="absolute bottom-1/2 md:right-10 right-0 lg:-translate-x-[-50%] bg-white shadow-xl shadow-gray-500 p-4 rounded-lg">
+            <div className='flex flex-col lg:hidden md:flex xl:flex'>
             <h3 className="text-xl font-semibold">Family Room with Private Bathroom</h3>
             <p className="text-2xl font-bold text-blue-600">
               Rs 500 <span className="text-lg font-normal">/ 1 night</span>
             </p>
+            </div>
             <button className="mt-2 bg-blue-600 text-white py-2 px-4 rounded-md" onClick={openModal}>
               See availability
             </button>
@@ -121,7 +123,7 @@ const Accomodation = () => {
 
       {showModal && (
         <div
-        className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+        className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 w-screen h-screen"
         onClick={closeModal} 
       >
         <div
@@ -135,7 +137,9 @@ const Accomodation = () => {
           >
             &times;
           </button>
+          <div className='pt-1'>
           <SearchForm />
+          </div>
         </div>
       </div>
       )}
