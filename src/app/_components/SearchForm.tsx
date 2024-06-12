@@ -1,5 +1,4 @@
 "use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -8,7 +7,6 @@ import { Button } from "~/components/ui/button";
 import { BedDoubleIcon, CalendarIcon } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { format } from "date-fns";
-
 import {
   Form,
   FormControl,
@@ -148,9 +146,9 @@ function SearchForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex relative flex-col lg:flex-row lg:max-w-6xl lg:mx-auto text-black items-center justify-center space-x-0 lg:space-x-2 space-y-4 lg:space-y-0 rounded-lg p-10 "
+        className="flex relative flex-col lg:flex-row lg:max-w-6xl lg:mx-auto text-black items-center justify-center space-x-0 lg:space-x-2 space-y-4 lg:space-y-0 rounded-lg "
       >
-        <Image src={bannerImg} className="z-[-1]" alt="hero" fill objectFit="cover" />
+        
         <div className="grid w-full lg:max-w-sm items-center gap-1.5">
           <FormField
             control={form.control}
@@ -254,46 +252,8 @@ function SearchForm() {
               )}
             />
           </div>
-
-
-
-          {/*selectedGuestHouse == GuestHouse.EXECUTIVE_GUEST_HOUSE &&
-            <div className="grid items-center flex-1">
-              <FormField
-                control={form.control}
-                name="rooms"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel className="font-extrabold">Rooms</FormLabel>
-                    <FormMessage />
-                    <FormControl>
-                      <Input min={1} max={1} type="number" placeholder="rooms" {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>*/}
-
-          {/*selectedGuestHouse != GuestHouse.EXECUTIVE_GUEST_HOUSE &&
-            <div className="grid items-center flex-1">
-              <FormField
-                control={form.control}
-                name="beds"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel className="font-extrabold">Beds</FormLabel>
-                    <FormMessage />
-                    <FormControl>
-                      <Input min={1} max={3} type="number" placeholder="beds" {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
-          */}
-
           <div className="mt-auto">
-            <Button type="submit" className="bg-blue-500 text-base">
+            <Button type="submit" className="bg-blue-600 text-base hover:bg-red-400">
               Search
             </Button>
           </div>

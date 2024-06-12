@@ -1,60 +1,44 @@
 "use client"
-import SearchForm from "./_components/SearchForm";
-import Image from "next/image";
+
+import Accomodation from "~/components/HomePage /Accomodation";
 import { CarouselPlugin } from "./_components/Caraousal/Caraousal";
 import VipCard from "./_components/VipCard/VipCard";
-import { Suspense } from "react";
 import Link from "next/link";
+import HeroSection from "~/components/HomePage /HeroSection";
+import MapSection from "~/components/HomePage /MapSection";
+import Footer from "~/components/HomePage /footer";
+import PhotoModal from "~/components/HomePage /PhotoModal";
+import { motion } from "framer-motion";
+import { slideInFromLeft, slideInFromTop } from "~/utils/motion";
 
 export default function Home() {
 
+
   return (
 
-    <main className="flex flex-col justify-center items-center gap-16">
-      <section className="flex flex-col gap-2 justify-center items-center text-center">
+    <main className="flex flex-col justify-center items-center max-w-[1440px] mx-auto py-20 ">
+      <motion.div
+      initial="hidden"
+      animate="visible"
+      >
+        <motion.section className="flex flex-col gap-2 justify-center items-center text-center"
+        variants={slideInFromTop}
+        >
 
-        <div className="font-bold text-primary text-xl md:text-3xl">NATIONAL INSTITUTE OF</div>
-        <div className="font-bold text-primary text-xl md:text-3xl"> TECHNICAL TEACHERS TRAINING AND RESEARCH, BHOPAL</div>
-        <div className="text-sm text-wrap">Estd in 1965 by the Ministry of Education, Government of India, NITTTR, Bhopal stands as a distinguished Deemed University training teachers and enhancing the overall quality of the Technical Education System. Our commitment extends to the continual improvement of educational standards.</div>
-      </section>
-      <section className="max-w-7xl mx-auto p-6">
-        <h2 className="font-bold text-5xl text-black">Staying Options in NITTTR</h2>
-      </section>
-      <section className="m-4 mt-0 -mb-14 px-2 lg:px-4">
-        <Suspense><SearchForm /></Suspense>
-      </section>
+          <div className="font-bold text-primary text-xl md:text-4xl">NATIONAL INSTITUTE OF</div>
+          <div className="font-bold text-primary text-xl md:text-4xl"> TECHNICAL TEACHERS TRAINING AND RESEARCH, BHOPAL</div>
+          <div className="text-sm sm:text-base md:text-xl">Estd in 1965 by the Ministry of Education, Government of India, NITTTR, Bhopal stands as a distinguished Deemed University training teachers and enhancing the overall quality of the Technical Education System. Our commitment extends to the continual improvement of educational standards.</div>
+        </motion.section>
 
-      <section className="mx-auto max-w-7xl mt-10 p-6 bg-white rounded-t-lg">
-        <div className="pt-5">
-          <h3 className="text-xl font-bold">Our Top Hostels</h3>
-          <p className="font-light">
-            Popular Choices
-          </p>
-        </div>
+        <HeroSection images={Choices.map((choice) => choice.src)} />
 
-        <div className="grid grid-cols-3 justify-center space-x-4 py-5 overflow-x-auto">
-          {Choices.map((item) => (
-            <Link href={`/gallery?location=${item.location}`} key={item.id} className="space-y-1 col-span-3 md:col-span-1  cursor-pointer">
-              <img
-                width={100}
-                height={100}
-                key={item.id}
-                className="w-80  h-72 object-cover rounded-lg pb-2"
-                src={item.src}
-                alt=""
-              />
+        <PhotoModal />
 
-              <p className="font-bold">{item.title}</p>
-              <p className="font-light text-sm">{item.description}</p>
-            </Link>
-          ))}
-        </div>
-      </section>
+        <Accomodation />
 
-      <CarouselPlugin></CarouselPlugin>
-      <section>
-        <VipCard></VipCard>
-      </section>
+        <MapSection />
+        <VipCard />
+      </motion.div>
     </main >
   );
 }

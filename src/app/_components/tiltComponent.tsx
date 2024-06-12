@@ -20,19 +20,14 @@ export default function TiltComponent({ img }: { img: any }) {
           >
 
             <Image
-              unoptimized
-              priority={true}
               src={img}
               alt={img}
-              width={100}
-              height={100}
+              width={500}
+              height={500}
               className="h-full w-full object-cover object-center sm:h-full sm:w-full"
             />
           </div>
-          <div className="flex flex-1 flex-col space-y-2 p-4">
-            <div className="flex flex-1 flex-col justify-end">
-            </div>
-          </div>
+         
         </div>
       </Tilt>
     </Link>

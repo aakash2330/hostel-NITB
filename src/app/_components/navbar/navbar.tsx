@@ -96,12 +96,10 @@ const Navbar = () => {
       <header className="hidden md:block">
         <nav
           aria-label="Top"
-          className="mx-auto   px-4 sm:px-6 lg:px-8"
+          className=" px-4 sm:px-6 lg:px-8"
         >
           <div className="border-b border-gray-200">
-            <div className="flex h-24 items-center justify-between">
-              <div className="flex flex-1 items-center lg:hidden">
-              </div>
+            <div className="flex h-fit py-2 items-center justify-between">
               <div className='md:text-2xl mx-2 font-bold cursor-pointer'>
 
                 <Link href={"https://nitttrbpl.ac.in"}>
@@ -111,20 +109,21 @@ const Navbar = () => {
 
               </div>
               {/* Flyout menus */}
-              <div className="flex justify-center w-full  items-center h-full gap-5 sm:gap-[15%]">
+              <div className="flex justify-end w-full h-full items-center gap-10">
                 {NavBarData.pages.map((page) => (
                   <a
                     key={page.name}
                     href={page.href}
-                    className="flex items-center hover:underline text-sm font-medium text-gray-700 hover:text-gray-800"
+                    className="flex items-center hover:underline text-xl font-medium text-gray-700 hover:text-gray-800"
                   >
                     {page.name}
                   </a>
                 ))}
-              </div>
-              {user ? 
+                 {user ? 
               <AccountDropdown></AccountDropdown>:<Button onClick={() => { signIn() }}>Login</Button>
               }
+              </div>
+             
             </div>
           </div>
         </nav>
