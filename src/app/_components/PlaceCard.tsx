@@ -16,7 +16,7 @@ const AppPlaceCard = ({
   xBookingType,
 }: any) => {
   return (
-    <div className="pt-4 flex max-w-xs flex-col rounded-xl border border-gray-300 bg-gray-300 bg-gradient-to-tr from-slate-100 p-4">
+    <div className="pt-4 flex max-w-xs flex-col rounded-xl border border-gray-300  bg-gradient-to-tr from-slate-200 via-white to-gray-300 p-4 drop-shadow-md hover:drop-shadow-xl drop-shadow-gray-400">
       {/* left - image */}
       <div className="relative mb-2 h-52 w-full sm:h-44 md:mb-0 ">
         <Image
@@ -54,11 +54,11 @@ const AppPlaceCard = ({
             <span className="font-semibold">{data.occupancy}</span>
             <span className="text-base text-gray-500">{data.floor}</span>
           </div>
-          <div>
+          {/* <div>
             <span className="flex items-center gap-2 text-sm font-semibold md:text-lg">
               <FaIndianRupeeSign /> {data.totalChargePerDay}/ night
             </span>
-          </div>
+          </div> */}
           <Link
             hidden={!(+room.maxAdult - room.guests.length)}
             href={`/hostel/${room.id}?checkin=${checkIn}&checkout=${checkOut}&type=${xBookingType}`}

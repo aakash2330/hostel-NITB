@@ -34,9 +34,12 @@ const roomFeatures = {
 function ProductHeroSlider({ roomDetails, checkin, checkout, bookingType }: { roomDetails: RoomDetails, checkin: Date, checkout: Date, bookingType: TbookingType }) {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
+
+
+  console.log(roomDetails,"dasdas")
   return (
     <div className="bg-white">
-      <main className="mx-auto max-w-7xl sm:px-6 sm:pt-16 lg:px-8">
+      <main className="mx-auto max-w-7xl sm:px-6 sm:py-16 lg:px-8">
         <div className="mx-auto max-w-2xl lg:max-w-none">
           {/* Product */}
           <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
@@ -91,10 +94,20 @@ function ProductHeroSlider({ roomDetails, checkin, checkout, bookingType }: { ro
             {/* Product info */}
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
               <h1 className="text-lg md:text-3xl font-bold tracking-tight text-gray-900">
-                {roomDetails.code}
+                {roomDetails?.hostelName}
               </h1>
+              <h2>{roomDetails?.floor}</h2>
+
+              <div className='flex flex-col gap-2'>
+                <span>features</span>
+                <span>geaser:{roomDetails?.geaser}</span>
+                <span>ac:{roomDetails?.ac}</span>
+                <span>max adult:{roomDetails?.maxAdult}</span>
+                <span>max child :{roomDetails?.maxChild}</span>
+              </div>
 
               <div className="mt-3">
+
                 <h2 className="sr-only">Product information</h2>
                 <p className="text-3xl tracking-tight text-gray-900">
                   {roomDetails.totalChargePerDay}

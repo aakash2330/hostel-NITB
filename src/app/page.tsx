@@ -1,16 +1,14 @@
 "use client"
 
 import Accomodation from "~/components/HomePage /Accomodation";
-import { CarouselPlugin } from "./_components/Caraousal/Caraousal";
 import VipCard from "./_components/VipCard/VipCard";
-import Link from "next/link";
 import HeroSection from "~/components/HomePage /HeroSection";
 import MapSection from "~/components/HomePage /MapSection";
-import Footer from "~/components/HomePage /footer";
 import PhotoModal from "~/components/HomePage /PhotoModal";
 import { motion } from "framer-motion";
-import { slideInFromLeft, slideInFromTop } from "~/utils/motion";
+import { slideInFromTop } from "~/utils/motion";
 import { useState } from "react";
+import StreetView from "~/components/HomePage /map";
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
@@ -39,6 +37,7 @@ export default function Home() {
 
         <MapSection />
         <VipCard />
+        
       </motion.div>
     </main >
   );

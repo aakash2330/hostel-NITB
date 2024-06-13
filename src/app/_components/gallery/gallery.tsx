@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import TiltComponent from "../tiltComponent";
 import { Button } from "~/components/ui/button";
 import Link from "next/dist/client/link";
+import StreetView from "~/components/HomePage /map";
 const saranRoomPictures = [
   "https://aakash2330-drippy.s3.amazonaws.com/NITTTR/saran/fwdsaranguesthouselatestphotograph/_DSC0346+(2).JPG",
   "https://aakash2330-drippy.s3.amazonaws.com/NITTTR/saran/fwdsaranguesthouselatestphotograph/DSC_0127.JPG",
@@ -77,6 +78,9 @@ export default function Gallery({
           })}
         </div>
       </div>
+      <div className="">
+      <StreetView />
+    </div>
     </div>
   );
 }
